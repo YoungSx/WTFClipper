@@ -1,6 +1,10 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { remote } from 'electron';
 import fs from 'fs';
+import { Button } from 'antd';
+
+import 'antd/dist/antd.css';
 
 interface Props {
 }
@@ -45,7 +49,7 @@ export default class App extends React.Component<Props, State> {
   public render = (): JSX.Element => {
     return (
       <section>
-        <button onClick={this.readTxtFileData}>读取一个txt文件的内容</button>
+        <Button type="primary" onClick={this.readTxtFileData}>读取一个txt文件的内容</Button>
         <div dangerouslySetInnerHTML={{__html: this.state.txtFileData}}/>
       </section>
     );
