@@ -6,4 +6,4 @@ module.exports = (config, env) => {
     // 这一步的操作, 都是为了能与 electron 进行更好的集成
     config.target = 'electron-renderer';
     return config;
-  };
+};
