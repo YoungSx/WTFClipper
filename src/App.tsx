@@ -12,10 +12,6 @@ interface State {
 }
 
 export default class App extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
-
   public render = (): JSX.Element => {
     return (
       <Editor></Editor>
