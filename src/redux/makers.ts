@@ -1,5 +1,14 @@
 const initialState = {
-    tracks: []
+    tracks: [
+        {
+            id: 'uj8ajnm32tnb',
+            items: [
+                {
+                    id: 'xxxxxxitem1'
+                }
+            ]
+        }
+    ]
 }
 
 export const getTracks = (state = initialState) => state.tracks

@@ -1,10 +1,16 @@
 import React from 'react';
-import style from './style/track.module.css'
 
-export default class BaseItem extends React.Component {
+interface BaseItemProps {
+    item: {
+        id: string
+    }
+}
+
+export default class BaseItem extends React.Component<BaseItemProps> {
     render () {
         return (
             <>
+                { this.props.item.id }
             </>
         )
     }

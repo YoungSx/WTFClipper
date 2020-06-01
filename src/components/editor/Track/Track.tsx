@@ -1,10 +1,21 @@
 import React from 'react';
-import style from './style/track.module.css'
+import BaseItem from './BaseItem'
 
-export default class Track extends React.Component {
+interface TrackProps {
+    track: {
+        id: string,
+        items: any[]
+    }
+}
+
+export default class Track extends React.Component<TrackProps> {
     render () {
+        let trackItems = this.props.track.items.map((item) => {
+            return <BaseItem item={item}></BaseItem>
+        })
         return (
             <>
+                { trackItems }
             </>
         )
     }
