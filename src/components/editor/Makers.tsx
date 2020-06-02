@@ -1,5 +1,6 @@
 import React from 'react';
 import Track from './Track/Track'
+import Timeline from './Track/Timeline'
 import { getTracks } from '../../redux/makers';
 import style from './Track/style/track.module.css'
 
@@ -11,7 +12,10 @@ export default class Makers extends React.Component {
         })
         return (
             <>
-                { trackItems }
+                <Timeline className={style.timeline}></Timeline>
+                <div className='tracks_area'>
+                    { trackItems }
+                </div>
             </>
         )
     }
