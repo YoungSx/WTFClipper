@@ -1,0 +1,9 @@
+.track {
+    height: 72px;
+    background-color: #f0f0f0;
+}
+.track_item {
+    height: 100%;
+    background-color: #adc6ff;
+    overflow: hidden;
+}

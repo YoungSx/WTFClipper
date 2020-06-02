@@ -6,4 +6,6 @@
 }
 .makers_area {
     height: 50vh;
+    background-color: #fafafa;
+    overflow-x: scroll;
 }
