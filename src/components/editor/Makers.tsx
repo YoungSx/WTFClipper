@@ -1,4 +1,5 @@
 import React from 'react';
+import MakersToolbar from './MakersToolbar'
 import Track from './Track/Track'
 import Timeline from './Track/Timeline'
 import { getTracks } from '../../redux/makers';
@@ -12,6 +13,7 @@ export default class Makers extends React.Component {
         })
         return (
             <>
+                <MakersToolbar className={style.makers_toolbar}></MakersToolbar>
                 <Timeline className={style.timeline}></Timeline>
                 <div className='tracks_area'>
                     { trackItems }
