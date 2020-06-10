@@ -7,11 +7,26 @@ interface BaseItemProps {
     className: string
 }
 
-export default class BaseItem extends React.Component<BaseItemProps> {
+interface BaseItemState {
+    itemStyle: {}
+}
+
+export default class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
+    constructor (props:BaseItemProps) {
+        super(props)
+        this.state = {
+            itemStyle: {
+                left: '0px',
+                width: '0px'
+            }
+        }
+    }
+    componentDidMount () {
+    }
     render () {
         return (
             <>
-                <div className={this.props.className}>
+                <div style={this.state.itemStyle} className={this.props.className}>
                     { this.props.item.id }
                 </div>
             </>
