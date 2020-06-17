@@ -1,8 +1,12 @@
 import React from 'react';
+import { timeToPixel } from '../../../utils/time'
 
 interface BaseItemProps {
     item: {
-        id: string
+        id: string,
+        clip_from: number,
+        clip_duration: number,
+        from: number
     },
     className: string
 }
@@ -21,8 +25,29 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
             }
         }
     }
+
     componentDidMount () {
+        this.setItemLeft(timeToPixel(this.props.item.from), () => {
+            this.setItemWidth(timeToPixel(this.props.item.clip_duration))
+        })
     }
+
+    setItemLeft (left: number, callback?: () => void) {
+        this.setState({
+            itemStyle: Object.assign({}, this.state.itemStyle, {
+                left: left.toString() + 'px'
+            })
+        }, callback)
+    }
+
+    setItemWidth (width: number, callback?: () => void) {
+        this.setState({
+            itemStyle: Object.assign({}, this.state.itemStyle, {
+                width: width.toString() + 'px'
+            })
+        }, callback)
+    }
+
     render () {
         return (
             <>
