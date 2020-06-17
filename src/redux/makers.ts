@@ -8,6 +8,12 @@ const initialState = {
                     clip_from: 0,
                     clip_duration: 1000,
                     from: 2000
+                },
+                {
+                    id: 'xxxxxxitem2',
+                    clip_from: 0,
+                    clip_duration: 1000,
+                    from: 14000
                 }
             ]
         }
