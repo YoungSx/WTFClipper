@@ -3,6 +3,7 @@
     height: 72px;
     background-color: #f0f0f0;
     position: relative;
+    user-select: none;
 }
 .track_item {
     height: 100%;
