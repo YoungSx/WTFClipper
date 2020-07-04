@@ -8,8 +8,5 @@
     width: 100%;
     height: 50vh;
     background-color: #fafafa;
-}
-.tracks_area {
-    overflow-x: scroll;
     position: absolute;
 }

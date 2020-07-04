@@ -15,7 +15,7 @@ export default class Makers extends React.Component {
             <>
                 <MakersToolbar className={style.makers_toolbar}></MakersToolbar>
                 <Timeline className={style.timeline}></Timeline>
-                <div className='tracks_area'>
+                <div className={style.tracks_area}>
                     { trackItems }
                 </div>
             </>
