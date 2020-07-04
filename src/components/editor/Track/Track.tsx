@@ -1,6 +1,5 @@
 import React from 'react';
 import BaseItem from './BaseItem'
-import style from './style/track.module.css'
 
 interface TrackProps {
     track: {
@@ -13,7 +12,7 @@ interface TrackProps {
 export default class Track extends React.Component<TrackProps> {
     render () {
         let trackItems = this.props.track.items.map((item) => {
-            return <BaseItem className={style.track_item} item={item}></BaseItem>
+            return <BaseItem item={item}></BaseItem>
         })
         return (
             <>

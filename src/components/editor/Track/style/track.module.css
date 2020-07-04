@@ -16,6 +16,36 @@
     overflow: hidden;
     position: absolute;
 }
+.inner_track_item {
+    height: 100%;
+}
+.inner_track_item_trimmer {
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    background-color: #85a5ff;
+    top: 0px;
+    cursor: ew-resize;
+    opacity: 0;
+}
+.inner_track_item_trimmer_selected {
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    background-color: #85a5ff;
+    top: 0px;
+    cursor: ew-resize;
+    opacity: 0;
+}
+.inner_track_item_trimmer_left {
+    left: 0px;
+}
+.inner_track_item_trimmer_right {
+    right: 0px;
+}
+.inner_track_item_body {
+    height: 100%;
+}
 .timeline {
     width: 100%;
     height: 30px;

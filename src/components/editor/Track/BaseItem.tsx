@@ -1,5 +1,6 @@
 import React from 'react';
 import { timeToPixel } from '../../../utils/time'
+import style from './style/track.module.css'
 
 interface BaseItemProps {
     item: {
@@ -7,8 +8,7 @@ interface BaseItemProps {
         clip_from: number,
         clip_duration: number,
         from: number
-    },
-    className: string
+    }
 }
 
 interface BaseItemState {
@@ -51,8 +51,14 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
     render () {
         return (
             <>
-                <div style={this.state.itemStyle} className={this.props.className}>
-                    { this.props.item.id }
+                <div id={'track_item_' + this.props.item.id} style={this.state.itemStyle} className={style.track_item}>
+                    <div id={'inner_track_item_' + this.props.item.id} className={style.inner_track_item}>
+                        <div id={'inner_track_item_trimmer_left_' + this.props.item.id} className={`${style.inner_track_item_trimmer} ${style.inner_track_item_trimmer_left}`}></div>
+                        <div id={'inner_track_item_body_' + this.props.item.id} className={style.inner_track_item_body}>
+                            { this.props.item.id }
+                        </div>
+                        <div id={'inner_track_item_trimmer_right_' + this.props.item.id} className={`${style.inner_track_item_trimmer} ${style.inner_track_item_trimmer_right}`}></div>
+                    </div>
                 </div>
             </>
         )
