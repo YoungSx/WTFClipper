@@ -9,7 +9,7 @@ export default class Makers extends React.Component {
     render () {
         let tracks = getTracks()
         const trackItems = tracks.map((track) => {
-            return <Track className={style.track} track={track}></Track>
+            return <Track className={style.track} key={`track_${track.id}`} track={track}></Track>
         })
         return (
             <>
