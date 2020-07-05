@@ -73,18 +73,22 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
 
     bindItemMoveEvent () {
         const itemEle = document.getElementById(this.state.trackItemId)
+        const makersEle = document.getElementById('makers_area')
         const itemMouseDown = (e: object) => {
             this.storeItemMoveStartStatus(e, itemEle)
             itemEle?.addEventListener('mousemove', itemMouseMove)
+            makersEle?.addEventListener('mousemove', itemMouseMove)
         }
         const itemMouseMove = (e: object) => {
             this.itemMove(e)
         }
         const itemMouseUp = (e: object) => {
             itemEle?.removeEventListener('mousemove', itemMouseMove)
+            makersEle?.removeEventListener('mousemove', itemMouseMove)
         }
         itemEle?.addEventListener('mousedown', itemMouseDown)
         itemEle?.addEventListener('mouseup', itemMouseUp)
+        makersEle?.addEventListener('mouseup', itemMouseUp)
     }
 
     itemMove (e: any) {

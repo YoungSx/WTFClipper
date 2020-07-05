@@ -12,7 +12,7 @@ export default class Editor extends React.Component {
                     <Col className={style.preview_area} span={12}>Preview area</Col>
                 </Row>
                 <Row>
-                    <Col className={style.makers_area} span={24}>
+                    <Col id="makers_area" className={style.makers_area} span={24}>
                         <Makers></Makers>
                     </Col>
                 </Row>
