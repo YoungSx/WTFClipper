@@ -1,4 +1,4 @@
-# WTFCliper
+# WTFClipper
 A video editor.
 
 # TODO
@@ -8,3 +8,4 @@ A video editor.
 - [ ] Transcode backend
 - [ ] Filters
 - [ ] Transition
+- [ ] Something about AI
