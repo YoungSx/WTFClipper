@@ -1,6 +1,7 @@
 import React from 'react';
 import { timeToPixel } from '../../../utils/time'
 import style from './style/track.module.css'
+import { baseItem as baseItemConfig } from './config'
 
 interface BaseItemProps {
     item: {
@@ -157,7 +158,8 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
     itemMove (e: any) {
         // 鼠标 x 轴偏移量 + 起始 left
         let left = e.clientX - this.state.itemMoveStartStatus.x + this.state.itemMoveStartStatus.left
-        this.setItemLeft(left)
+        if (Math.abs(left - this.state.itemMoveStartStatus.left) > baseItemConfig.dragThresholdX)
+            this.setItemLeft(left)
     }
 
     TrimmerMove (e: any, orient: string, trimmer: any, itemEle: any) {
