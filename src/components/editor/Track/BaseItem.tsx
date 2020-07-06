@@ -99,17 +99,23 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
     }
 
     bindItemMoveEvent (itemEle: HTMLElement | null, makersEle: HTMLElement | null) {
-        const itemMouseDown = (e: object) => {
+        const itemMouseDown = (e: any) => {
             this.storeItemMoveStartStatus(e, itemEle)
             itemEle?.addEventListener('mousemove', itemMouseMove)
             makersEle?.addEventListener('mousemove', itemMouseMove)
         }
-        const itemMouseMove = (e: object) => {
+        const itemMouseMove = (e: any) => {
             this.itemMove(e)
         }
-        const itemMouseUp = (e: object) => {
+        const itemMouseUp = (e: any) => {
             itemEle?.removeEventListener('mousemove', itemMouseMove)
             makersEle?.removeEventListener('mousemove', itemMouseMove)
+            if (e.clientX === this.state.itemMoveStartStatus.x
+                && e.clientY === this.state.itemMoveStartStatus.y) {
+                this.itemOnlyClick()
+            } else {
+                // set item time
+            }
         }
         itemEle?.addEventListener('mousedown', itemMouseDown)
         itemEle?.addEventListener('mouseup', itemMouseUp)
@@ -212,6 +218,14 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                 offset: this.state.offset
             }
         })
+    }
+
+    itemOnlyClick () {
+        /**
+         * TODO:
+         *  set selected item
+         *  ...
+         */
     }
 
     render () {
