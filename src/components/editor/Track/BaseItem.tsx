@@ -23,7 +23,9 @@ interface BaseItemState {
         y: number,
         left: number,
         top: number
-    }
+    },
+    itemEle: HTMLElement | null,
+    makersEle: HTMLElement | null
 }
 
 export default class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
@@ -44,7 +46,9 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                 y: 0,
                 left: 0,
                 top: 0
-            }
+            },
+            itemEle: null,
+            makersEle: null
         }
     }
 
@@ -52,7 +56,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         this.setItemLeft(timeToPixel(this.props.item.from), () => {
             this.setItemWidth(timeToPixel(this.props.item.clip_duration))
         })
-        this.bindItemMoveEvent()
+        this.setState({
+            itemEle: document.getElementById(this.state.trackItemId),
+            makersEle: document.getElementById('makers_area')
+        }, () => {
+            this.bindItemMoveEvent(this.state.itemEle, this.state.makersEle)
+        })
     }
 
     setItemLeft (left: number, callback?: () => void) {
@@ -71,9 +80,7 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         }, callback)
     }
 
-    bindItemMoveEvent () {
-        const itemEle = document.getElementById(this.state.trackItemId)
-        const makersEle = document.getElementById('makers_area')
+    bindItemMoveEvent (itemEle: HTMLElement | null, makersEle: HTMLElement | null) {
         const itemMouseDown = (e: object) => {
             this.storeItemMoveStartStatus(e, itemEle)
             itemEle?.addEventListener('mousemove', itemMouseMove)
