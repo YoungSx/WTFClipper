@@ -17,7 +17,8 @@ const initialState = {
                 }
             ]
         }
-    ]
+    ],
+    selectedTrackItemsId: [] 
 }
 
 export const getTracks = (state = initialState) => state.tracks
