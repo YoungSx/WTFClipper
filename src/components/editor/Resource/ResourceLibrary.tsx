@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd'
+import Private from "./Private"
 
 const { TabPane } = Tabs
 
@@ -9,7 +10,7 @@ export default class ResourceLibrary extends React.Component {
             <>
                 <Tabs defaultActiveKey="1" tabPosition="left" style={{ height: 220 }}>
                     <TabPane tab="My medias" key="1">
-                        there are some medias
+                        <Private></Private>
                     </TabPane>
                 </Tabs>
             </>
