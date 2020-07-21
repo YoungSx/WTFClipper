@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import style from './style/editor.module.css'
-import ResourceLibrary from '../../components/editor/ResourceLibrary'
+import ResourceLibrary from '../../components/editor/Resource/ResourceLibrary'
 import Makers from '../../components/editor/Makers'
 
 export default class Editor extends React.Component {
