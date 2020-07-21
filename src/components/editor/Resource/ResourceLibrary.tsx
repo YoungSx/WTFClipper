@@ -3,7 +3,7 @@ import { Tabs } from 'antd'
 
 const { TabPane } = Tabs
 
-export default class Makers extends React.Component {
+export default class ResourceLibrary extends React.Component {
     render () {
         return (
             <>
