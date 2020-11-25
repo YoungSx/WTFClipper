@@ -1,11 +1,12 @@
 import React from 'react';
-import { parseFileNameFromPath } from '../../../utils/file'
+import { parseFileNameFromPath, getCoverImage } from '../../../utils/file'
+import { dataBase } from '../../../utils/db'
 import { appData as appDataConfig } from '../../../config'
 import { file as fileConfig } from './config'
 import { inArray } from '../../../utils/tool'
 
 export default class Private extends React.Component {
-    myMediasOnDrop (e: any) {
+    myMediasOnDrop = (e: any) => {
         let readyAddingFiles = []
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
             let file = e.dataTransfer.files[i]
@@ -27,6 +28,15 @@ export default class Private extends React.Component {
          *  2. 数据库
          *  3. 生成封面图
          */
+        getCoverImage(srcFile, (r: string) => {
+            /**
+             * TODO:
+             * check if sucess
+             */
+            let db = new dataBase('private_files')
+            db.push({ filename: srcFile})
+            console.log(db.read('filename'))
+        })
     }
 
     render () {
