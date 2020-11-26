@@ -14,11 +14,11 @@ export function parseFileNameFromPath (path:string) {
     }
 }
 
-export function getCoverImage (src: string, callback: any) {
+export function getCoverImage (src: string, dstName: string, callback: any) {
     let inputPath = src
     inputPath = inputPath.replace('{%RESOURCE_HOME%}', appDataConfig.RESOURCE_HOME)
     const transcoder = new Transcoder()
-    transcoder.generateCoverImage(inputPath, (result: string) => {
+    transcoder.generateCoverImage(inputPath, dstName, (result: string) => {
         callback(result)
     })
 }
