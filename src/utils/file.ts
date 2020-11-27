@@ -1,4 +1,6 @@
-import { appData as appDataConfig } from '../config'
+import { appData as appDataConfig, appConst } from '../config'
+import { file as fileConfig } from '../components/editor/Resource/config'
+import { inArray } from './tool'
 import Transcoder from './transcoder'
 
 export function parseFileNameFromPath (path:string) {
@@ -23,7 +25,7 @@ export function getCoverImage (src: string, dstName: string, callback: any) {
     })
 }
 
-export function UUID() {
+export function UUID () {
     let str = '0123456789abcdef'
     let arr = []
     for(let i = 0; i < 36; i++){
@@ -34,4 +36,15 @@ export function UUID() {
     arr[8] = arr[13] = arr[18] = arr[23] = '-'
     return arr.join('')
 }
-  
+
+export function extType (ext: string) {
+    if (inArray(ext, fileConfig.allowedVideoExts)) return appConst.FILE_VIDEO
+    if (inArray(ext, fileConfig.allowedAudioExts)) return appConst.FILE_AUDIO
+    if (inArray(ext, fileConfig.allowedPictureExts)) return appConst.FILE_PICTURE
+    return appConst.FILE_UNKNOWN
+}
+
+export function fileType (path: string) {
+    let { ext } = parseFileNameFromPath(path)
+    return extType(ext)
+}
