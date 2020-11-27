@@ -1,0 +1,26 @@
+.file {
+    width: 80px;
+    height: 100px;
+    margin: 5px;
+    float: left;
+}
+
+.file:hover {
+    background-color: #d9d9d9;
+}
+
+.file_cover {
+    width: 100%;
+    height: calc(100% - 20px);
+}
+
+.file_name {
+    width: 100%;
+    height: 20px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    user-select: none;
+    text-align: center;
+}
