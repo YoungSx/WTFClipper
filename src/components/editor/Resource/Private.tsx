@@ -4,6 +4,9 @@ import { dataBase } from '../../../utils/db'
 import { appData as appDataConfig } from '../../../config'
 import { file as fileConfig } from './config'
 import { inArray } from '../../../utils/tool'
+import { getResource } from '../../../redux/resource'
+
+import BaseFile from './BaseFile'
 
 export default class Private extends React.Component {
     myMediasOnDrop = (e: any) => {
@@ -40,11 +43,15 @@ export default class Private extends React.Component {
     }
 
     render () {
+        let privateMedias = getResource()['private']['media']
+        let files = privateMedias.map((file) => {
+            return <BaseFile key={`file_${file.id}`} file={file}></BaseFile>
+        })
         return (
             <>
                 { /** It's strange that if I don't add the onDragOver and preventDefault, the onDrop won't work. */ }
                 <div onDragOver={ (e) => { e.preventDefault() } } onDrop={ this.myMediasOnDrop }>
-                    You can drag and drop some media files here.
+                    { files }
                 </div>
             </>
         )
