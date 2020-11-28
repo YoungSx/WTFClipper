@@ -1,5 +1,6 @@
 .tracks_area {
     width: 100%;
+    height: calc(50vh - 70px);
     overflow-x: scroll;
     position: absolute;
 }
