@@ -20,3 +20,11 @@ export interface AudioFileType extends MediaFileType {
 export interface PictureFileType extends MediaFileType {
     type: 'picture'
 }
+
+export interface PrivateStoreModel {
+    private: {
+        media: [
+            BaseFileType
+        ]
+    }
+}
