@@ -29,7 +29,11 @@ export class dataBase {
         return this.db.push(data).write()
     }
 
-    read (columen: string) {
-        return this.db.map(columen).value()
+    read () {
+        return this.db.value()
+    }
+
+    readColumn (column: string) {
+        return this.db.map(column).value()
     }
 }
