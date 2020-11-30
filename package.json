@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-redux": "^7.1.11",
     "cross-env": "^7.0.2",
     "electron": "^9.0.0",
     "react-app-rewired": "^2.1.6",
