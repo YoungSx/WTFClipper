@@ -28,7 +28,7 @@ export default class ResourceLibrary extends React.Component {
     render () {
         return (
             <>
-                <Tabs defaultActiveKey="1" tabPosition="left" style={{ height: 220 }}>
+                <Tabs defaultActiveKey="1" tabPosition="left">
                     <TabPane tab="My medias" key="1">
                         <Private></Private>
                     </TabPane>

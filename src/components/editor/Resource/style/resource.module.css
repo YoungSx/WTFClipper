@@ -1,0 +1,5 @@
+.files_container {
+    height: 50vh;
+    width: 100%;
+    overflow-y: scroll;
+}

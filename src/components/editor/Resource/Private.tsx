@@ -7,6 +7,7 @@ import { inArray } from '../../../utils/tool'
 import { appConst } from '../../../config'
 import { SET_PRIVATE_RESOURCE } from '../../../redux/constants/resource'
 import { PrivateStoreModel } from '../../../model/type'
+import style from './style/resource.module.css'
 
 import { getResource } from '../../../redux/resource'
 import resource from '../../../redux/resource'
@@ -68,7 +69,7 @@ class Private extends React.Component<PrivateStoreModel> {
         return (
             <>
                 { /** It's strange that if I don't add the onDragOver and preventDefault, the onDrop won't work. */ }
-                <div onDragOver={ (e) => { e.preventDefault() } } onDrop={ this.myMediasOnDrop }>
+                <div className={ style.files_container } onDragOver={ (e) => { e.preventDefault() } } onDrop={ this.myMediasOnDrop }>
                     { files.length > 0 ? files : 'Please drag some media files and drop them here.' }
                 </div>
             </>
