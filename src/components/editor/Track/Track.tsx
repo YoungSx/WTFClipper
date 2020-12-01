@@ -11,12 +11,12 @@ interface TrackProps {
 
 export default class Track extends React.Component<TrackProps> {
     render () {
-        let trackItems = this.props.track.items.map((item) => {
-            return <BaseItem key={`track_${item.id}`} item={item}></BaseItem>
+        let trackItems = this.props.track.items.map((item, index) => {
+            return <BaseItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></BaseItem>
         })
         return (
             <>
-                <div className={this.props.className}>
+                <div className={ this.props.className }>
                     { trackItems }
                 </div>
             </>

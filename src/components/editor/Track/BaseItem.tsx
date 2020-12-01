@@ -1,5 +1,5 @@
 import React from 'react';
-import { timeToPixel } from '../../../utils/time'
+import { timeToPixel, pixelToTime } from '../../../utils/time'
 import style from './style/track.module.css'
 import { baseItem as baseItemConfig } from './config'
 
@@ -9,6 +9,11 @@ interface BaseItemProps {
         clip_from: number,
         clip_duration: number,
         from: number
+    },
+    index: number,
+    track: {
+        id: string,
+        items: any[]
     }
 }
 
@@ -162,11 +167,103 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
     }
 
     itemMove (e: any) {
+        /**
+         * TODO
+         *  1. position is valid?
+         *  2. update to store
+         *  3. change order
+         *  4. derail
+         */
         // 鼠标 x 轴偏移量 + 起始 left
         let left = e.clientX - this.state.itemMoveStartStatus.x + this.state.itemMoveStartStatus.left
-        if (Math.abs(left - this.state.itemMoveStartStatus.left) > baseItemConfig.dragThresholdX)
+        
+        // don't move if abs(offset) < threshold
+        // if (Math.abs(left - this.state.itemMoveStartStatus.left) <= baseItemConfig.dragThresholdX)
+        //     return
+
+        let moreRightThanNextItem = () => {
+            return false
+        }
+
+        let moreLeftThanPreItem = () => {
+            return false
+        }
+
+        /**
+         * TODO
+         *  chnage order
+         */
+        if (this.conflictCheck(left).valid)
             this.setItemLeft(left)
+        else if (moreRightThanNextItem())
+            this.changeOrder(1)
+        else if (moreLeftThanPreItem())
+            this.changeOrder(-1)
+        else {
+            let newLeft = this.conflictCheck(left).left
+            newLeft = newLeft ? newLeft : 0
+            this.setItemLeft(newLeft)
+        }
+            
     }
+
+    /**
+     * param:
+     *  left(px)
+     *  width(px)
+     * 
+     *  return format: {
+     *      valid: bool,
+     *      left?: number,
+     *      width?: number
+     *  }
+     */
+    conflictCheck (left?: number, width?: number) {
+        let leftLessThanPreItemEnd = (left: number) => {
+            return (this.props.index > 0 &&
+                (this.props.track.items[this.props.index - 1].from + this.props.track.items[this.props.index - 1].clip_duration >
+                    pixelToTime(left)))
+        }
+
+        let rightMoreThanNextItemStart = (left: number) => {
+            return (this.props.index < this.props.track.items.length - 1 &&
+                (Math.round(pixelToTime(left) + this.props.item.clip_duration) >
+                    this.props.track.items[this.props.index + 1].from))
+        }
+
+        if (left !== undefined) {
+            // first item in the track, but get negative left
+            if (this.props.index === 0 && left < 0) return {
+                valid: false,
+                left: 0,
+                width: undefined
+            }
+
+            if (leftLessThanPreItemEnd(left)) return {
+                valid: false,
+                left: timeToPixel(this.props.track.items[this.props.index - 1].from +
+                    this.props.track.items[this.props.index - 1].clip_duration),
+                width: undefined
+            }
+
+            if (rightMoreThanNextItemStart(left)) return {
+                valid: false,
+                left: timeToPixel(this.props.track.items[this.props.index + 1].from -
+                    this.props.item.clip_duration),
+                width: undefined
+            }
+        } else if (width !== undefined) {
+        } else {
+        }
+
+        return {
+            valid: true,
+            left: undefined,
+            width: undefined
+        }
+    }
+
+    changeOrder (indexOffset: number) {}
 
     TrimmerMove (e: any, orient: string, trimmer: any, itemEle: any) {
         if (orient === 'left') {
