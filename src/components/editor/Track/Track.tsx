@@ -1,11 +1,10 @@
 import React from 'react';
 import BaseItem from './BaseItem'
 
+import { TrackModel } from '../../../model/type'
+
 interface TrackProps {
-    track: {
-        id: string,
-        items: any[]
-    },
+    track: TrackModel,
     className: string
 }
 

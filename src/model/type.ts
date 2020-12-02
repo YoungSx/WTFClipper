@@ -21,6 +21,27 @@ export interface PictureFileType extends MediaFileType {
     type: 'picture'
 }
 
+export interface TrackItemModel {
+    id: string,
+    clip_from: number,
+    clip_duration: number,
+    from: number
+}
+
+export interface TrackModel {
+    id: string,
+    items: [
+        TrackItemModel
+    ]
+}
+
+export interface MakersStoreModel {
+    tracks: [
+        TrackModel
+    ],
+    selectedTrackItemsId: []
+}
+
 export interface PrivateStoreModel {
     private: {
         media: [

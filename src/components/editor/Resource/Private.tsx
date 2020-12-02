@@ -9,8 +9,7 @@ import { SET_PRIVATE_RESOURCE } from '../../../redux/constants/resource'
 import { PrivateStoreModel } from '../../../model/type'
 import style from './style/resource.module.css'
 
-import { getResource } from '../../../redux/resource'
-import resource from '../../../redux/resource'
+import store from '../../../redux'
 
 import BaseFile from './BaseFile'
 
@@ -52,7 +51,7 @@ class Private extends React.Component<PrivateStoreModel> {
 
             // update to redux
             let private_files = db.read()
-            resource.dispatch(
+            store.dispatch(
                 {
                     type: SET_PRIVATE_RESOURCE,
                     resource: private_files
@@ -77,9 +76,15 @@ class Private extends React.Component<PrivateStoreModel> {
     }
 }
 
+const mapStateToProps = (state: any, ownProps: any) => {
+    return {
+        private: state['resource']['libraries']['private']
+    }
+}
+
 export default connect(
-    getResource,
+    mapStateToProps,
     {
-        resource
+        store
     }
 )(Private as any)

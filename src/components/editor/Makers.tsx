@@ -1,14 +1,17 @@
-import React from 'react';
+import React from 'react'
+import { connect } from 'react-redux'
 import MakersToolbar from './MakersToolbar'
 import Track from './Track/Track'
 import Timeline from './Track/Timeline'
-import { getTracks } from '../../redux/makers';
 import style from './Track/style/track.module.css'
 
-export default class Makers extends React.Component {
+import { MakersStoreModel } from '../../model/type'
+
+import store from '../../redux'
+
+class Makers extends React.Component<MakersStoreModel> {
     render () {
-        let tracks = getTracks()
-        const trackItems = tracks.map((track) => {
+        const trackItems = this.props['tracks'].map((track) => {
             return <Track className={style.track} key={`track_${track.id}`} track={track}></Track>
         })
         return (
@@ -22,3 +25,16 @@ export default class Makers extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (state: any, ownProps: any) => {
+    return {
+        tracks: state['makers']['tracks']
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    {
+        store
+    }
+)(Makers as any)

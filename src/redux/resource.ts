@@ -1,5 +1,4 @@
 import { SET_PRIVATE_RESOURCE } from './constants/resource'
-import { createStore } from 'redux'
 
 const initialState = {
     libraries: {
@@ -28,7 +27,7 @@ const initialState = {
 
 export const getResource = (state = initialState) => state.libraries
 
-export const resourceReducer = (state = initialState, action: any) => {
+export const resource = (state = initialState, action: any) => {
     switch (action.type) {
         case SET_PRIVATE_RESOURCE:
             return Object.assign({}, state, {
@@ -42,7 +41,5 @@ export const resourceReducer = (state = initialState, action: any) => {
             return state
     }
 }
-
-const resource = createStore(resourceReducer)
 
 export default resource

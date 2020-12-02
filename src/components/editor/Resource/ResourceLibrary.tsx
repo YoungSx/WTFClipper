@@ -5,7 +5,7 @@ import Private from "./Private"
 import { dataBase } from '../../../utils/db'
 import { SET_PRIVATE_RESOURCE } from '../../../redux/constants/resource'
 
-import resource from '../../../redux/resource'
+import store from '../../../redux'
 
 const { TabPane } = Tabs
 
@@ -13,7 +13,7 @@ export default class ResourceLibrary extends React.Component {
     databaseToStore () {
         let db = new dataBase('private_files')
         let private_files = db.read()
-        resource.dispatch(
+        store.dispatch(
             {
                 type: SET_PRIVATE_RESOURCE,
                 resource: private_files

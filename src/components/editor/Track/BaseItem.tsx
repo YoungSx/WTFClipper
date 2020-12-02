@@ -1,20 +1,17 @@
-import React from 'react';
+import React from 'react'
+import { connect } from 'react-redux'
 import { timeToPixel, pixelToTime } from '../../../utils/time'
 import style from './style/track.module.css'
 import { baseItem as baseItemConfig } from './config'
 
+import { TrackItemModel, TrackModel } from '../../../model/type'
+
+import store from '../../../redux'
+
 interface BaseItemProps {
-    item: {
-        id: string,
-        clip_from: number,
-        clip_duration: number,
-        from: number
-    },
+    item: TrackItemModel,
     index: number,
-    track: {
-        id: string,
-        items: any[]
-    }
+    track: TrackModel
 }
 
 interface BaseItemState {
