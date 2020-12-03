@@ -5,6 +5,7 @@ import style from './style/track.module.css'
 import { baseItem as baseItemConfig } from './config'
 
 import { TrackItemModel, TrackModel } from '../../../model/type'
+import { UPDATE_ITEM_TIME } from '../../../redux/constants/makers'
 
 import store from '../../../redux'
 
@@ -34,9 +35,14 @@ interface BaseItemState {
         width: number,
         offset: number
     },
-    itemEle: HTMLElement | null,
-    makersEle: HTMLElement | null,
-    offset: number
+    itemEle: any,
+    makersEle: any,
+    offset: number,
+    timeInfo: {
+        from: number,
+        clip_from: number,
+        clip_duration: number
+    }
 }
 
 export default class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
@@ -67,7 +73,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
             },
             itemEle: null,
             makersEle: null,
-            offset: 0
+            offset: 0,
+            timeInfo: {
+                from: this.props.item.from,
+                clip_from: this.props.item.clip_from,
+                clip_duration: this.props.item.clip_duration
+            }
         }
     }
 
@@ -100,6 +111,35 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         }, callback)
     }
 
+    syncTimeOut () {
+        this.computeTimeInfo()
+        let itemList = [
+            Object.assign({
+                itemId: this.props.item.id,
+                trackId: this.props.track.id
+            }, this.state.timeInfo)
+        ]
+        store.dispatch({
+            type: UPDATE_ITEM_TIME,
+            itemInfoList: itemList
+        })    
+    }
+
+    computeTimeInfo () {
+        let left = this.state.itemEle.getBoundingClientRect().left - this.state.itemEle.parentNode.getBoundingClientRect().left
+        let timeFrom = pixelToTime(left)
+        
+        let width = this.state.itemEle.getBoundingClientRect().width
+        let duration = pixelToTime(width)
+
+        this.setState({
+            timeInfo: Object.assign({}, this.state.timeInfo, {
+                from: timeFrom,
+                clip_duration: duration
+            })
+        })
+    }
+
     bindItemMoveEvent (itemEle: HTMLElement | null, makersEle: HTMLElement | null) {
         const itemMouseDown = (e: any) => {
             this.storeItemMoveStartStatus(e, itemEle)
@@ -116,7 +156,7 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                 && e.clientY === this.state.itemMoveStartStatus.y) {
                 this.itemOnlyClick()
             } else {
-                // set item time
+                this.syncTimeOut()
             }
         }
         itemEle?.addEventListener('mousedown', itemMouseDown)
@@ -166,10 +206,8 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
     itemMove (e: any) {
         /**
          * TODO
-         *  1. position is valid?
-         *  2. update to store
-         *  3. change order
-         *  4. derail
+         *  1. change order
+         *  2. derail
          */
         // 鼠标 x 轴偏移量 + 起始 left
         let left = e.clientX - this.state.itemMoveStartStatus.x + this.state.itemMoveStartStatus.left
@@ -191,7 +229,8 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
          *  chnage order
          */
         if (this.conflictCheck(left).valid)
-            this.setItemLeft(left)
+            this.setItemLeft(left, () => {
+            })
         else if (moreRightThanNextItem())
             this.changeOrder(1)
         else if (moreLeftThanPreItem())
@@ -199,7 +238,8 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         else {
             let newLeft = this.conflictCheck(left).left
             newLeft = newLeft ? newLeft : 0
-            this.setItemLeft(newLeft)
+            this.setItemLeft(newLeft, () => {
+            })
         }
             
     }

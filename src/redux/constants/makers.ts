@@ -1,2 +1,4 @@
 export const ADD_TRACK = 'ADD_TRACK'
 export const ADD_ITEM_TO_TRACK = 'ADD_ITEM_TO_TRACK'
+export const UPDATE_ITEM = 'UPDATE_ITEM'
+export const UPDATE_ITEM_TIME = 'UPDATE_ITEM_TIME'
