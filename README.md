@@ -2,6 +2,9 @@
 A video editor.
 
 # Dev
+## Requirements
+* ffmpeg
+* node.js
 ## Install
 ```bash
 npm install
