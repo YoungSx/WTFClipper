@@ -16,7 +16,7 @@ export default class ResourceLibrary extends React.Component {
         store.dispatch(
             {
                 type: SET_PRIVATE_RESOURCE,
-                resource: private_files
+                resource: private_files ? private_files : []
             }
         )
     }
