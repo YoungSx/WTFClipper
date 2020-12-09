@@ -27,6 +27,14 @@ const initialState = {
 
 export const getResource = (state = initialState) => state.libraries
 
+export const getResourceFile = (state = initialState, rid: string) => {
+    for (let i = 0; i < state.libraries.private.media.length; i++) {
+        let file = state.libraries.private.media[i]
+        if (rid === file.id) return file 
+    }
+    return null
+}
+
 export const resource = (state = initialState, action: any) => {
     switch (action.type) {
         case SET_PRIVATE_RESOURCE:
