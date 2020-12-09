@@ -30,22 +30,16 @@ export interface TrackItemModel {
 
 export interface TrackModel {
     id: string,
-    items: [
-        TrackItemModel
-    ]
+    items: Array<TrackItemModel>
 }
 
 export interface MakersStoreModel {
-    tracks: [
-        TrackModel
-    ],
-    selectedTrackItemsId: []
+    tracks: Array<TrackModel>,
+    selectedTrackItemsId: Array<any>
 }
 
 export interface PrivateStoreModel {
     private: {
-        media: [
-            BaseFileType
-        ]
+        media: Array<BaseFileType>
     }
 }
