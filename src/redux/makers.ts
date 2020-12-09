@@ -58,7 +58,7 @@ const fileToItem = (file: BaseFileType) => {
     }
 }
 
-const getInsertPos = (state = initialState, time: number, duration: number, track: TrackModel) => {
+export const getInsertPos = (state = initialState, time: number, duration: number, track: TrackModel) => {
     time = time > 0 ? time : 0
     let result: {
         valid: boolean,
@@ -122,9 +122,7 @@ const getInsertPos = (state = initialState, time: number, duration: number, trac
     return result
 }
 
-const addResourceToTrack = (state = initialState, file: BaseFileType, timeFrom: number, trackId: string, itemIndex: number) => {
-    let item: TrackItemModel = fileToItem(file)
-    item.from = 0 // timeFrom
+const addItemToTrack = (state = initialState, item: TrackItemModel, trackId: string, itemIndex: number) => {
     let newState = deepCopy(state)
     for (let trackIndex = 0, founded = false; trackIndex < newState.tracks.length && !founded; trackIndex++) {
         if (newState.tracks[trackIndex].id == trackId) {
@@ -135,6 +133,14 @@ const addResourceToTrack = (state = initialState, file: BaseFileType, timeFrom: 
     return newState
 }
 
+const addResourceToTrack = (state = initialState, file: BaseFileType, timeFrom: number, clip_duration: number, trackId: string, itemIndex: number) => {
+    let item: TrackItemModel = Object.assign(fileToItem(file), {
+        from: timeFrom,
+        clip_duration: clip_duration
+    })
+    return addItemToTrack(state, item, trackId, itemIndex)
+}
+
 const makers = (state = initialState, action: any) => {
     switch (action.type) {
         case UPDATE_ITEM:
@@ -142,7 +148,7 @@ const makers = (state = initialState, action: any) => {
         case UPDATE_ITEM_TIME:
             return updateItemTime(state, action.itemInfoList)
         case ADD_RESOURCE_TO_TRACK:
-            return addResourceToTrack(state, action.file, action.timeFrom, action.trackId, action.itemIndex)
+            return addResourceToTrack(state, action.file, action.timeFrom, action.clip_duration, action.trackId, action.itemIndex)
         default:
             return state
     }
