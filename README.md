@@ -31,10 +31,11 @@ npm run start-electron
   - [ ] Display private file
     - [x] Display from database
     - [ ] Display cover image
-  - [ ] Drag to tracks
+  - [x] Drag to tracks
   - [ ] Insert new track
 - [ ] Transcode backend
-  - [ ] Generate cover image
+  - [x] Generate cover image
+  - [ ] Get duration
   - [ ] Clip & joint video
   - [ ] Separate video/audio
 - [ ] ...
