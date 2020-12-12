@@ -126,7 +126,6 @@ const addItemToTrack = (state = initialState, item: TrackItemModel, trackId: str
     let newState = deepCopy(state)
     for (let trackIndex = 0, founded = false; trackIndex < newState.tracks.length && !founded; trackIndex++) {
         if (newState.tracks[trackIndex].id == trackId) {
-            itemIndex = itemIndex ? itemIndex : newState.tracks[trackIndex].items.length
             newState.tracks[trackIndex].items.splice(itemIndex, 0, item)
         }
     }
