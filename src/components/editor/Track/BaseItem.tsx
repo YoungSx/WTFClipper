@@ -255,7 +255,7 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
      *      width?: number
      *  }
      */
-    conflictCheck (left?: number, width?: number) {
+    conflictCheck (left: number, width?: number) {
         let leftLessThanPreItemEnd = (left: number) => {
             return (this.props.index > 0 &&
                 (this.props.track.items[this.props.index - 1].from + this.props.track.items[this.props.index - 1].clip_duration >
@@ -268,14 +268,21 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                     this.props.track.items[this.props.index + 1].from))
         }
 
-        if (left !== undefined) {
-            // first item in the track, but get negative left
-            if (this.props.index === 0 && left < 0) return {
-                valid: false,
-                left: 0,
-                width: undefined
-            }
+        let trimmerRightMoreThanNextItemStart = (width: number) => {
+            return (this.props.index < this.props.track.items.length - 1 &&
+                (Math.round(pixelToTime(width) + this.props.item.from) >
+                    this.props.track.items[this.props.index + 1].from))
+        }
 
+
+        // first item in the track, but get negative left
+        if (this.props.index === 0 && left < 0) return {
+            valid: false,
+            left: 0,
+            width: undefined
+        }
+
+        if (width == undefined) {
             if (leftLessThanPreItemEnd(left)) return {
                 valid: false,
                 left: timeToPixel(this.props.track.items[this.props.index - 1].from +
@@ -289,8 +296,23 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                     this.props.item.clip_duration),
                 width: undefined
             }
-        } else if (width !== undefined) {
         } else {
+            if (leftLessThanPreItemEnd(left)) {
+                let newLeft = timeToPixel(this.props.track.items[this.props.index - 1].from +
+                    this.props.track.items[this.props.index - 1].clip_duration)
+                let newWidth = (left - newLeft) + width
+                return {
+                    valid: false,
+                    left: newLeft,
+                    width: newWidth
+                }
+            }
+
+            if (trimmerRightMoreThanNextItemStart(width)) return {
+                valid: false,
+                left: left,
+                width: timeToPixel(this.props.track.items[this.props.index + 1].from - this.props.item.from)
+            }
         }
 
         return {
@@ -310,9 +332,17 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
             let newWidth = this.state.trimmersMoveStartStatus.width
                 - (e.clientX - this.state.trimmersMoveStartStatus.x
                 - itemEle.parentNode.getBoundingClientRect().left)
-            this.setItemLeft(x, () => {
-                this.setItemWidth(newWidth)
-            })
+
+            let conflict = this.conflictCheck(x, newWidth)
+            if (conflict.valid) 
+                this.setItemLeft(x, () => {
+                    this.setItemWidth(newWidth)
+                })
+            else if (conflict.left !== undefined && conflict.width !== undefined)
+                this.setItemLeft(conflict.left, () => {
+                    if (conflict.width !== undefined)
+                        this.setItemWidth(conflict.width)
+                })
         } else {
             let x = e.clientX - itemEle.parentNode.getBoundingClientRect().left
             let left = itemEle.getBoundingClientRect().left - itemEle.parentNode.getBoundingClientRect().left
@@ -327,7 +357,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                 + this.state.trimmersMoveStartStatus.width
                 - (this.state.trimmersMoveStartStatus.x
                 - this.state.trimmersMoveStartStatus.left)
-            this.setItemWidth(newWidth)
+
+            let conflict = this.conflictCheck(x, newWidth)
+            if (conflict.valid) 
+                this.setItemWidth(newWidth)
+            else if (conflict.width !== undefined)
+                this.setItemWidth(conflict.width)
         }
     }
 
