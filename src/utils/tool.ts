@@ -11,7 +11,7 @@ export function deepCopy(source: any): any {
     if(null == source || {} == source || [] == source) return source
     let newObject : any
     let isArray = false
-    if((source as any).length) {
+    if((source as any).length !== undefined) {
         newObject = []
         isArray = true
     } else {
