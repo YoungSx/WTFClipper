@@ -10,6 +10,7 @@
     background-color: #f0f0f0;
     position: relative;
     user-select: none;
+    margin: 10px 0px;
 }
 .track_item {
     height: 100%;
