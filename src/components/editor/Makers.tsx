@@ -5,11 +5,16 @@ import Track from './Track/Track'
 import Timeline from './Track/Timeline'
 import style from './Track/style/track.module.css'
 
+import { pixelToTime } from '../../utils/time'
+
 import { MakersStoreModel } from '../../model/type'
+import { ADD_RESOURCE_TO_NEW_TRACK } from '../../redux/constants/makers'
 
 import store from '../../redux'
 
-class Makers extends React.Component<MakersStoreModel> {
+import { getResourceFile } from '../../redux/resource'
+import { getInsertPos } from '../../redux/makers'
+
 interface MakersState {
     tracksAreaEle: any,
     header: {
@@ -41,11 +46,48 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
     }
 
     bindMakersEvent () {
+        const tracksAreaOnDrop = (e: any) => {
+            this.tracksAreaOnDrop(e, e.dataTransfer.getData("rid"))
+        }
         const tracksAreaScroll = (e: any) => {
             this.tracksAreaScroll()
         }
+        this.state.tracksAreaEle.addEventListener('dragover', (e: any) => {
+            e.preventDefault()
+        })
+        this.state.tracksAreaEle.addEventListener('drop', tracksAreaOnDrop)
         this.state.tracksAreaEle.addEventListener('scroll', tracksAreaScroll)
     }
+
+    tracksAreaOnDrop (e: any, rid: string) {
+        e.preventDefault()
+        e.stopPropagation()
+        let x = e.layerX + this.state.header.offset
+        let time = pixelToTime(x)
+        let file = getResourceFile(store.getState().resource, rid)
+        /**
+         * TODO:
+         * track 目标轨道暂定 0
+         */
+        this.addResourceToNewTrack(rid, time, 0)
+    }
+
+    addResourceToNewTrack (rid: string, time: number, trackIndex: number) {
+        /**
+         * TODO:
+         * 现在写了 10000ms duration 测试数据，后需要在 file 预处理获取到真正 duration
+         */
+        let file = getResourceFile(store.getState().resource, rid)
+        store.dispatch({
+            type: ADD_RESOURCE_TO_NEW_TRACK,
+            file: file,
+            timeFrom: time,
+            clip_duration: 10000,
+            itemIndex: 0,
+            trackIndex: trackIndex
+        })
+    }
+
     tracksAreaScroll () {
         this.setState({
             header: {
@@ -63,7 +105,6 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
             <>
                 <MakersToolbar className={style.makers_toolbar}></MakersToolbar>
                 <Timeline className={style.timeline}></Timeline>
-                <div className={style.tracks_area}>
                 <div id="tracks_area" className={style.tracks_area}>
                     { trackItems }
                 </div>

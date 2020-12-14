@@ -1,5 +1,5 @@
 import { BaseFileType, TrackItemModel, TrackModel } from '../model/type'
-import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK } from './constants/makers'
+import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK } from './constants/makers'
 
 import { deepCopy } from '../utils/tool'
 import { UUID } from '../utils/file'
@@ -122,6 +122,24 @@ export const getInsertPos = (state = initialState, time: number, duration: numbe
     return result
 }
 
+const createTrack = () => {
+    return {
+        id: UUID(),
+        items: []
+    }
+}
+
+const addTrack = (state = initialState, trackIndex: number) => {
+    let track: TrackModel = createTrack()
+    state.tracks.splice(trackIndex, 0, track)
+    return state
+}
+
+const addResourceToNewTrack = (state = initialState, file: BaseFileType, timeFrom: number, clip_duration: number, itemIndex: number, trackIndex: number) => {
+    state = addTrack(state, trackIndex)
+    return addResourceToTrack(state, file, timeFrom, clip_duration, state.tracks[0].id, itemIndex)
+}
+
 const addItemToTrack = (state = initialState, item: TrackItemModel, trackId: string, itemIndex: number) => {
     let newState = deepCopy(state)
     for (let trackIndex = 0, founded = false; trackIndex < newState.tracks.length && !founded; trackIndex++) {
@@ -148,6 +166,8 @@ const makers = (state = initialState, action: any) => {
             return updateItemTime(state, action.itemInfoList)
         case ADD_RESOURCE_TO_TRACK:
             return addResourceToTrack(state, action.file, action.timeFrom, action.clip_duration, action.trackId, action.itemIndex)
+        case ADD_RESOURCE_TO_NEW_TRACK:
+            return addResourceToNewTrack(state, action.file, action.timeFrom, action.clip_duration, action.itemIndex, action.trackIndex)
         default:
             return state
     }
