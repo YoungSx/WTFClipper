@@ -25,6 +25,15 @@ export function getCoverImage (src: string, dstName: string, callback: any) {
     })
 }
 
+export function getDuration (src: string, callback: any) {
+    let inputPath = src
+    inputPath = inputPath.replace('{%RESOURCE_HOME%}', appDataConfig.RESOURCE_HOME)
+    const transcoder = new Transcoder()
+    transcoder.getDuration(inputPath, (result: number | string) => {
+        callback(result)
+    })
+}
+
 export function UUID () {
     let str = '0123456789abcdef'
     let arr = []

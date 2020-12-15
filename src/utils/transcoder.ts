@@ -17,6 +17,20 @@ class Transcoder {
             }
         })
     }
+
+    getDuration (input: string, callback?: any) {
+        let cmd = `ffprobe -show_entries format=duration -of default=nk=1:nw=1 ${input}`
+        // 结果在 stdout 中, 正常 err 为 null
+        let result = child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
+            if (err) {
+                callback(err)
+            } else if (stdout) {
+                callback(<number><unknown>stdout * 1000)
+            } else {
+                callback(stderr)
+            }
+        })
+    }
 }
 
 export default Transcoder
