@@ -7,7 +7,7 @@ import style from './Track/style/track.module.css'
 
 import { pixelToTime } from '../../utils/time'
 
-import { MakersStoreModel } from '../../model/type'
+import { MakersStoreModel, FILETYPE } from '../../model/type'
 import { ADD_RESOURCE_TO_NEW_TRACK } from '../../redux/constants/makers'
 
 import store from '../../redux'
@@ -73,19 +73,17 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
     }
 
     addResourceToNewTrack (rid: string, time: number, trackIndex: number) {
-        /**
-         * TODO:
-         * 现在写了 10000ms duration 测试数据，后需要在 file 预处理获取到真正 duration
-         */
         let file = getResourceFile(store.getState().resource, rid)
-        store.dispatch({
-            type: ADD_RESOURCE_TO_NEW_TRACK,
-            file: file,
-            timeFrom: time,
-            clip_duration: 10000,
-            itemIndex: 0,
-            trackIndex: trackIndex
-        })
+        if (file !== null && file.type === FILETYPE.VIDEO) {
+            store.dispatch({
+                type: ADD_RESOURCE_TO_NEW_TRACK,
+                file: file,
+                timeFrom: time,
+                clip_duration: file.duration,
+                itemIndex: 0,
+                trackIndex: trackIndex
+            })
+        }
     }
 
     tracksAreaScroll () {

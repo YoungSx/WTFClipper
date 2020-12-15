@@ -1,24 +1,32 @@
+export enum FILETYPE {
+    VIDEO = 'video',
+    AUDIO = 'audio',
+    PICTURE = 'picture',
+    UNKNOWN = 'unknown'
+}
+
 export interface BaseFileType {
     id: string,
     name: string,
     displayName: string,
-    type: string
+    type: FILETYPE
 }
 
 export interface MediaFileType extends BaseFileType {
-    path: string
+    path: string,
+    duration: number
 }
 
 export interface VideoFileType extends MediaFileType {
-    type: 'video'
+    type: FILETYPE.VIDEO
 }
 
 export interface AudioFileType extends MediaFileType {
-    type: 'audio'
+    type: FILETYPE.AUDIO
 }
 
 export interface PictureFileType extends MediaFileType {
-    type: 'picture'
+    type: FILETYPE.PICTURE
 }
 
 export interface TrackItemModel {
@@ -40,6 +48,6 @@ export interface MakersStoreModel {
 
 export interface PrivateStoreModel {
     private: {
-        media: Array<BaseFileType>
+        media: Array<MediaFileType>
     }
 }

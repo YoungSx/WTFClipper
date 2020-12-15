@@ -4,7 +4,7 @@ import BaseItem from './BaseItem'
 
 import { pixelToTime } from '../../../utils/time'
 
-import { TrackModel } from '../../../model/type'
+import { TrackModel, BaseFileType, MediaFileType, FILETYPE } from '../../../model/type'
 import { ADD_RESOURCE_TO_TRACK } from '../../../redux/constants/makers'
 
 import store from '../../../redux'
@@ -54,21 +54,19 @@ class Track extends React.Component<TrackProps, TrackState> {
     }
 
     addResourceToTrack (rid: string, time: number) {
-        /**
-         * TODO:
-         * 现在写了 10000ms duration 测试数据，后需要在 file 预处理获取到真正 duration
-         */
         let file = getResourceFile(store.getState().resource, rid)
-        let insertPos = getInsertPos(store.getState().makers, time, 10000, this.props.track)
-        if (insertPos.valid)
-            store.dispatch({
-                type: ADD_RESOURCE_TO_TRACK,
-                file: file,
-                timeFrom: insertPos.from,
-                clip_duration: insertPos.duration,
-                trackId: this.props.track.id,
-                itemIndex: insertPos.index
-            })
+        if (file !== null && file.type === FILETYPE.VIDEO) {
+            let insertPos = getInsertPos(store.getState().makers, time, file.duration, this.props.track)
+            if (insertPos.valid)
+                store.dispatch({
+                    type: ADD_RESOURCE_TO_TRACK,
+                    file: file,
+                    timeFrom: insertPos.from,
+                    clip_duration: insertPos.duration,
+                    trackId: this.props.track.id,
+                    itemIndex: insertPos.index
+                })
+        }
     }
 
     render () {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { parseFileNameFromPath, getCoverImage, UUID } from '../../../utils/file'
+import { parseFileNameFromPath, getCoverImage, getDuration, UUID } from '../../../utils/file'
 import { dataBase } from '../../../utils/db'
 import { file as fileConfig } from './config'
 import { inArray } from '../../../utils/tool'
 import { appConst } from '../../../config'
 import { SET_PRIVATE_RESOURCE } from '../../../redux/constants/resource'
-import { PrivateStoreModel } from '../../../model/type'
+import { PrivateStoreModel, VideoFileType, FILETYPE } from '../../../model/type'
 import style from './style/resource.module.css'
 
 import store from '../../../redux'
@@ -33,30 +33,35 @@ class Private extends React.Component<PrivateStoreModel> {
     addFileToPrivateLibrary (src: string) {
         let id = UUID()
         let { name, nameWithoutExt } = parseFileNameFromPath(src)
-        getCoverImage(src, id, (r: string) => {
-            /**
-             * TODO:
-             * check if sucess
-             */
+        getDuration(src, (duration_result: number | string) => {
+            if (typeof duration_result === "number")
+                getCoverImage(src, id, (r: string) => {
+                    /**
+                     * TODO:
+                     * check if sucess
+                     */
 
-            // save to db
-            let db = new dataBase('private_files')
-            db.push({
-                id: id,
-                path: src,
-                type: appConst.FILE_VIDEO,
-                name: name,
-                displayName: nameWithoutExt
-            })
-
-            // update to redux
-            let private_files = db.read()
-            store.dispatch(
-                {
-                    type: SET_PRIVATE_RESOURCE,
-                    resource: private_files
-                }
-            )
+                    // save to db
+                    let file_item: VideoFileType = {
+                        id: id,
+                        path: src,
+                        type: FILETYPE.VIDEO,
+                        duration: duration_result,
+                        name: name,
+                        displayName: nameWithoutExt
+                    }
+                    let db = new dataBase('private_files')
+                    db.push(file_item)
+        
+                    // update to redux
+                    let private_files = db.read()
+                    store.dispatch(
+                        {
+                            type: SET_PRIVATE_RESOURCE,
+                            resource: private_files
+                        }
+                    )
+                })
         })
     }
 
