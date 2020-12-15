@@ -1,4 +1,5 @@
-import { appData as appDataConfig, appConst } from '../config'
+import { appData as appDataConfig } from '../config'
+import { FILETYPE } from '../model/type'
 import { file as fileConfig } from '../components/editor/Resource/config'
 import { inArray } from './tool'
 import Transcoder from './transcoder'
@@ -47,10 +48,10 @@ export function UUID () {
 }
 
 export function extType (ext: string) {
-    if (inArray(ext, fileConfig.allowedVideoExts)) return appConst.FILE_VIDEO
-    if (inArray(ext, fileConfig.allowedAudioExts)) return appConst.FILE_AUDIO
-    if (inArray(ext, fileConfig.allowedPictureExts)) return appConst.FILE_PICTURE
-    return appConst.FILE_UNKNOWN
+    if (inArray(ext, fileConfig.allowedVideoExts)) return FILETYPE.VIDEO
+    if (inArray(ext, fileConfig.allowedAudioExts)) return FILETYPE.AUDIO
+    if (inArray(ext, fileConfig.allowedPictureExts)) return FILETYPE.PICTURE
+    return FILETYPE.UNKNOWN
 }
 
 export function fileType (path: string) {
