@@ -73,7 +73,7 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
             },
             itemEle: null,
             makersEle: null,
-            offset: 0,
+            offset: 0 - timeToPixel(this.props.item.clip_from),
             timeInfo: {
                 from: this.props.item.from,
                 clip_from: this.props.item.clip_from,
@@ -132,9 +132,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         let width = this.state.itemEle.getBoundingClientRect().width
         let duration = pixelToTime(width)
 
+        let clipFrom = pixelToTime(Math.abs(this.state.offset))
+
         this.setState({
             timeInfo: Object.assign({}, this.state.timeInfo, {
                 from: timeFrom,
+                clip_from: clipFrom,
                 clip_duration: duration
             })
         })
@@ -343,6 +346,8 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
                     if (conflict.width !== undefined)
                         this.setItemWidth(conflict.width)
                 })
+            this.setOffset(this.state.trimmersMoveStartStatus.offset + (this.state.trimmersMoveStartStatus.left - x) < 0 ?
+                this.state.trimmersMoveStartStatus.offset + (this.state.trimmersMoveStartStatus.left - x) : 0)
         } else {
             let x = e.clientX - itemEle.parentNode.getBoundingClientRect().left
             let left = itemEle.getBoundingClientRect().left - itemEle.parentNode.getBoundingClientRect().left
@@ -364,6 +369,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
             else if (conflict.width !== undefined)
                 this.setItemWidth(conflict.width)
         }
+    }
+
+    setOffset (offset: number) {
+        this.setState({
+            offset: offset
+        })
     }
 
     storeItemMoveStartStatus (e: any, itemEle: any) {
