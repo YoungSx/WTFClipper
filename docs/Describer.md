@@ -9,12 +9,17 @@
             items: [ // list
                 {
                     id: '' // String,
+                    rid: '' // String,
                     clip_from: 0, // ms
                     clip_duration: 1000, // ms
                     from: 2000 // ms, global situation
                 },
                 {
-                    id: ''
+                    id: '' // String,
+                    rid: '' // String,
+                    clip_from: 0, // ms
+                    clip_duration: 1000, // ms
+                    from: 2000 // ms, global situation
                 }
             ]
         },

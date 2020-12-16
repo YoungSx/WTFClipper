@@ -52,6 +52,7 @@ const updateItemTime = (state = initialState, itemInfoList: [any]) => {
 const fileToItem = (file: BaseFileType) => {
     return {
         id: UUID(),
+        rid: file.id,
         from: 0,
         clip_from: 0,
         clip_duration: 1000

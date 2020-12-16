@@ -31,6 +31,7 @@ export interface PictureFileType extends MediaFileType {
 
 export interface TrackItemModel {
     id: string,
+    rid: string,
     clip_from: number,
     clip_duration: number,
     from: number
