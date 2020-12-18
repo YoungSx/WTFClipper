@@ -11,6 +11,9 @@ const { TabPane } = Tabs
 
 export default class ResourceLibrary extends React.Component {
     databaseToStore () {
+        // if no database, create
+        if (!dataBase.exist('private_files')) dataBase.create('private_files', [])
+
         let db = new dataBase('private_files')
         let private_files = db.read()
         store.dispatch(

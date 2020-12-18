@@ -14,7 +14,11 @@ export class dataBase {
     }
 
     static create (name: string, value: any) {
-        db.defaults({ name: value }).write()
+        let obj: {
+            [key: string]: []
+        } = {}
+        obj[name] = value
+        db.defaults(obj).write()
     }
     
     static exist (name: string) {
