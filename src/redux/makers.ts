@@ -1,4 +1,4 @@
-import { BaseFileType, TrackItemModel, TrackModel } from '../model/type'
+import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE } from '../model/type'
 import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK } from './constants/makers'
 
 import { deepCopy } from '../utils/tool'
@@ -49,13 +49,30 @@ const updateItemTime = (state = initialState, itemInfoList: [any]) => {
     return newState
 }
 
-const fileToItem = (file: BaseFileType) => {
+const fileToItem = (file: BaseFileType | MediaFileType) => {
+    let path
+    if ((file.type === FILETYPE.VIDEO || file.type === FILETYPE.AUDIO) && 'path' in file) path = file.path
+
+    let type: TRACKITEMTYPE
+    switch (file.type) {
+        case FILETYPE.VIDEO:
+            type = TRACKITEMTYPE.VIDEO
+            break
+        case FILETYPE.AUDIO:
+            type = TRACKITEMTYPE.AUDIO
+            break
+        default:
+            type = TRACKITEMTYPE.PICTURE
+    }
+
     return {
         id: UUID(),
         rid: file.id,
+        type: type,
         from: 0,
         clip_from: 0,
-        clip_duration: 1000
+        clip_duration: 0,
+        path
     }
 }
 

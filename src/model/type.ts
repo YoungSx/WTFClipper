@@ -5,6 +5,12 @@ export enum FILETYPE {
     UNKNOWN = 'unknown'
 }
 
+export enum TRACKITEMTYPE {
+    VIDEO = 'video',
+    AUDIO = 'audio',
+    PICTURE = 'picture'
+}
+
 export interface BaseFileType {
     id: string,
     name: string,
@@ -32,9 +38,22 @@ export interface PictureFileType extends MediaFileType {
 export interface TrackItemModel {
     id: string,
     rid: string,
+    type: TRACKITEMTYPE,
     clip_from: number,
     clip_duration: number,
-    from: number
+    from: number,
+    path?: string
+}
+
+export interface TrackMediaItemModel extends TrackItemModel {
+}
+
+export interface TrackVideoItemModel extends TrackItemModel {
+    type: TRACKITEMTYPE.VIDEO
+}
+
+export interface TrackAudioItemModel extends TrackItemModel {
+    type: TRACKITEMTYPE.AUDIO
 }
 
 export interface TrackModel {
