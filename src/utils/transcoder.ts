@@ -31,6 +31,19 @@ class Transcoder {
             }
         })
     }
+
+    clipMedia (input: string, output: string, from: number, duration: number, callback?: any) {
+        let cmd = `ffmpeg -ss ${from} -i ${input} -vcodec libx264 -acodec aac -t ${duration} ${output} -y`
+        let result = child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
+            if (err) {
+                callback(err)
+            } else if (stdout) {
+                callback(<number><unknown>stdout * 1000)
+            } else {
+                callback(stderr)
+            }
+        })
+    }
 }
 
 export default Transcoder
