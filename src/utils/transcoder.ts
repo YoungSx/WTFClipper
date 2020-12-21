@@ -31,6 +31,19 @@ class Transcoder {
             }
         })
     }
+    
+    generateSilentAudio (duration: number, sampleRate: number = 44100, channelLayout: string, output: string, callback?: any) {
+        let cmd = `ffmpeg -f lavfi -i anullsrc=channel_layout=${channelLayout}:sample_rate=${sampleRate} -t ${duration} ${output}`
+        let result = child_process.exec(cmd, function(err: string, stdout: string, stderr: string){
+            if (err) {
+                callback(err)
+            } else if (stdout) {
+                callback(stdout)
+            } else {
+                callback(stderr)
+            }
+        })
+    }
 
     getDuration (input: string, callback?: any) {
         let cmd = `ffprobe -show_entries format=duration -of default=nk=1:nw=1 ${input}`
