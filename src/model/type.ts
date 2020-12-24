@@ -66,6 +66,13 @@ export interface MakersStoreModel {
     selectedTrackItemsId: Array<any>
 }
 
+export interface DescriptorModel {
+    id: string,
+    createTime: number,
+    updateTime: number,
+    tracks: Array<TrackModel>
+}
+
 export interface PrivateStoreModel {
     private: {
         media: Array<MediaFileType>
