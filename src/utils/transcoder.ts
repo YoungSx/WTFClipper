@@ -21,6 +21,7 @@ class Transcoder {
     generateBlackVideo (duration: number, frameRate: number, color: string, width: number, height: number, output: string, callback?: any) {
         let resolution = <string><any>width + 'x' + <string><any>height
         let cmd = `ffmpeg -f lavfi -i color=size=${resolution}:rate=${frameRate}:color=${color} -t ${duration} ${output}`
+        let cmd = `ffmpeg -f lavfi -i color=size=${resolution}:rate=${frameRate}:color=${color} -t ${duration / 1000} ${output}`
         let result = child_process.exec(cmd, function(err: string, stdout: string, stderr: string){
             if (err) {
                 callback(err)
@@ -34,6 +35,7 @@ class Transcoder {
     
     generateSilentAudio (duration: number, sampleRate: number = 44100, channelLayout: string, output: string, callback?: any) {
         let cmd = `ffmpeg -f lavfi -i anullsrc=channel_layout=${channelLayout}:sample_rate=${sampleRate} -t ${duration} ${output}`
+        let cmd = `ffmpeg -f lavfi -i anullsrc=channel_layout=${channelLayout}:sample_rate=${sampleRate} -t ${duration / 1000} ${output}`
         let result = child_process.exec(cmd, function(err: string, stdout: string, stderr: string){
             if (err) {
                 callback(err)
