@@ -85,6 +85,20 @@ class Transcoder {
             } else {
                 callback(stderr)
             }
+    clipMedia (input: string, output: string, from: number, duration: number) {
+        let cmd = `ffmpeg -ss ${from / 1000} -i ${input} -vcodec libx264 -acodec aac -t ${duration / 1000} ${output} -y`
+        return new Promise((resolve, reject) => {
+            child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
+                if (err) {
+                    resolve(err)
+                } else if (stdout) {
+                    resolve(stdout)
+                } else {
+                    resolve(stderr)
+                }
+            })
+        })
+    }
         })
     }
 
