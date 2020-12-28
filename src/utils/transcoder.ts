@@ -1,6 +1,6 @@
 import { appData } from '../config'
 import { parseFileNameFromPath, UUID } from '../utils/file'
-import { TRACKITEMTYPE, DescriptorModel, TrackVideoItemModel, TrackAudioItemModel } from '../model/type'
+import { TRACKITEMTYPE, DescriptorModel, TrackModel, TrackVideoItemModel, TrackAudioItemModel } from '../model/type'
 
 import { deepCopy } from '../utils/tool'
 
@@ -75,16 +75,6 @@ class Transcoder {
         })
     }
 
-    clipMedia (input: string, output: string, from: number, duration: number, callback?: any) {
-        let cmd = `ffmpeg -ss ${from} -i ${input} -vcodec libx264 -acodec aac -t ${duration} ${output} -y`
-        let result = child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
-            if (err) {
-                callback(err)
-            } else if (stdout) {
-                callback(<number><unknown>stdout * 1000)
-            } else {
-                callback(stderr)
-            }
     clipMedia (input: string, output: string, from: number, duration: number) {
         let cmd = `ffmpeg -ss ${from / 1000} -i ${input} -vcodec libx264 -acodec aac -t ${duration / 1000} ${output} -y`
         return new Promise((resolve, reject) => {
@@ -99,7 +89,38 @@ class Transcoder {
             })
         })
     }
+
+    overlayBackground (backgroudnInput: string, input1: string, from: number, output: string) {
+        let cmd = `ffmpeg -itsoffset ${from / 1000} -i ${input1} -i ${backgroudnInput} -lavfi "[0:v]scale=1920:1080[a];[1:v][a]overlay=0:0:eof_action=pass[c]" -map [c] -c:v libx264 ${output} -y`
+        return new Promise((resolve, reject) => {
+            child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
+                if (err) {
+                    resolve(err)
+                } else if (stdout) {
+                    resolve(stdout)
+                } else {
+                    resolve(stderr)
+                }
+            })
         })
+    }
+
+    async composeVideoTrack (track: TrackModel, backgroundPath: string) {
+        let output = ''
+        let input = backgroundPath
+        let transcoder = new Transcoder()
+
+        for (let i = 0; i < track.items.length; i++) {
+            let item = track.items[i]
+            if (item.path !== undefined)
+                await transcoder.clipMedia(item.path, `${appData.CACHE_DIR}/${item.id}_clip.mp4`, item.clip_from, item.clip_duration)
+            
+            output = `${appData.CACHE_DIR}/${item.id}_composed.mp4`
+            await transcoder.overlayBackground(input, `${appData.CACHE_DIR}/${item.id}_clip.mp4`, item.from, output)
+            input = output
+        }
+
+        return output
     }
 
     produce (descriptor: DescriptorModel) {
