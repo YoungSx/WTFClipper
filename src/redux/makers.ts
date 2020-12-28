@@ -1,31 +1,11 @@
-import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE } from '../model/type'
+import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE, MakersStoreModel } from '../model/type'
 import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK } from './constants/makers'
 
 import { deepCopy } from '../utils/tool'
 import { UUID } from '../utils/file'
 
-const initialState = {
-    tracks: [
-        {
-            id: 'uj8ajnm32tnb',
-            items: [
-                {
-                    id: 'xxxxxxitem1',
-                    type: TRACKITEMTYPE.VIDEO,
-                    clip_from: 0,
-                    clip_duration: 1000,
-                    from: 2000
-                },
-                {
-                    id: 'xxxxxxitem2',
-                    type: TRACKITEMTYPE.VIDEO,
-                    clip_from: 0,
-                    clip_duration: 1000,
-                    from: 14000
-                }
-            ]
-        }
-    ],
+const initialState: MakersStoreModel = {
+    tracks: [],
     selectedTrackItemsId: [] 
 }
 
