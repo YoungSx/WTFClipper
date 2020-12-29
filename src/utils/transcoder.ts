@@ -5,6 +5,7 @@ import { TRACKITEMTYPE, DescriptorModel, TrackModel, TrackVideoItemModel, TrackA
 import { deepCopy } from '../utils/tool'
 
 const child_process = require('child_process')
+const fs = require('fs')
 
 class Transcoder {
     generateCoverImage (input: string, dstName: string, callback?: any) {
@@ -105,7 +106,7 @@ class Transcoder {
         })
     }
 
-    async composeVideoTrack (track: TrackModel, backgroundPath: string) {
+    async composeVideoTrack (track: TrackModel, backgroundPath: string, composedPath: string) {
         let output = ''
         let input = backgroundPath
         let transcoder = new Transcoder()
@@ -115,8 +116,12 @@ class Transcoder {
             if (item.path !== undefined)
                 await transcoder.clipMedia(item.path, `${appData.CACHE_DIR}/${item.id}_clip.mp4`, item.clip_from, item.clip_duration)
             
-            output = `${appData.CACHE_DIR}/${item.id}_composed.mp4`
+            // specify the final name
+            if (i === track.items.length - 1) output = composedPath
+            else output = `${appData.CACHE_DIR}/${item.id}_composed.mp4`
+
             await transcoder.overlayBackground(input, `${appData.CACHE_DIR}/${item.id}_clip.mp4`, item.from, output)
+
             input = output
         }
 
@@ -144,7 +149,7 @@ class Transcoder {
 
         const generateBackground = (descriptor: DescriptorModel, output: string, duration: number,
                                     frameRate: number, width: number, height: number,
-                                    sampleRate: number, channelLayout: string, callback?: any) => {
+                                    sampleRate: number, channelLayout: string) => {
             let outputPathV = `${appData.CACHE_DIR}/${descriptor.id}_background_v.mp4`
             let backgroundVideoItem: TrackVideoItemModel = {
                 id: UUID(),
@@ -168,38 +173,49 @@ class Transcoder {
             }
 
             let transcoder = new Transcoder()
-            console.log('start video...')
-            transcoder.generateBlackVideo(duration, frameRate, 'black', width, height, outputPathV, (r: any) => {
-                console.log(r)
+
+            return new Promise((resolve, reject) => {
                 console.log('start video...')
-                transcoder.generateSilentAudio(duration, sampleRate, channelLayout, outputPathA, (r: any) => {
+                transcoder.generateBlackVideo(duration, frameRate, 'black', width, height, outputPathV, (r: any) => {
                     console.log(r)
-                    console.log('start merge...')
-                    transcoder.mergeVideoAndAudio(outputPathV, outputPathA, output, (r: any) => {
+                    console.log('start video...')
+                    transcoder.generateSilentAudio(duration, sampleRate, channelLayout, outputPathA, (r: any) => {
                         console.log(r)
+                        console.log('start merge...')
+                        transcoder.mergeVideoAndAudio(outputPathV, outputPathA, output, (r: any) => {
+                            console.log(r)
+                            resolve(output)
+                        })
                     })
                 })
             })
-
-            return descriptor
         }
 
-        let outputPath = `${appData.CACHE_DIR}/${descriptor.id}_background.mp4`
+        let bgPath = `${appData.CACHE_DIR}/${descriptor.id}_background.mp4`
         let globalVideoDuration = getGlobalVideoDuration(descriptor)
         let globalAudioDuration = getGlobalAudioDuration(descriptor)
         let globalDuration = globalVideoDuration > globalAudioDuration ? globalVideoDuration : globalAudioDuration
 
-        generateBackground(deepCopy(descriptor), outputPath, globalDuration,
-            30, 1920, 1080, 44100, 'stereo', () => {
-                console.log('merge finished')
-                /**
-                 * TODO:
-                 *  1. clip & join
-                 *  2. picture in picture
-                 */
-                
+        let bgPromise = generateBackground(deepCopy(descriptor), bgPath, globalDuration, 30, 1920, 1080, 44100, 'stereo')
+        bgPromise.then(async () => {
+            let transcoder = new Transcoder()
+            let composedPath = ''
+            let lastPath = bgPath
+
+            for (let trackIndex = descriptor.tracks.length - 1; trackIndex >= 0; trackIndex--) {
+                composedPath = `${appData.CACHE_DIR}/track_${descriptor.tracks[trackIndex].id}_composed.mp4`
+
+                let overlayedPath = `${appData.CACHE_DIR}/track_${descriptor.tracks[trackIndex].id}_overlayed.mp4`
+
+                await transcoder.composeVideoTrack(descriptor.tracks[trackIndex], lastPath, composedPath)
+
+                await transcoder.overlayBackground(lastPath, composedPath, 0, overlayedPath)
+
+                lastPath = overlayedPath
             }
-        )
+
+            console.log('final path:', lastPath)
+        })
     }
 }
 
