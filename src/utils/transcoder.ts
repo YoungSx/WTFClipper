@@ -113,14 +113,20 @@ class Transcoder {
 
         for (let i = 0; i < track.items.length; i++) {
             let item = track.items[i]
+            let segment = `${appData.CACHE_DIR}/${item.id}_clip.mp4`
+
             if (item.path !== undefined)
-                await transcoder.clipMedia(item.path, `${appData.CACHE_DIR}/${item.id}_clip.mp4`, item.clip_from, item.clip_duration)
+                await transcoder.clipMedia(item.path, segment, item.clip_from, item.clip_duration)
             
             // specify the final name
             if (i === track.items.length - 1) output = composedPath
             else output = `${appData.CACHE_DIR}/${item.id}_composed.mp4`
 
-            await transcoder.overlayBackground(input, `${appData.CACHE_DIR}/${item.id}_clip.mp4`, item.from, output)
+            await transcoder.overlayBackground(input, segment, item.from, output)
+
+            // delete clip temp file
+            fs.unlink(segment, () => {})
+            fs.unlink(input, () => {})
 
             input = output
         }
@@ -184,6 +190,11 @@ class Transcoder {
                         console.log('start merge...')
                         transcoder.mergeVideoAndAudio(outputPathV, outputPathA, output, (r: any) => {
                             console.log(r)
+
+                            // delete temp file
+                            fs.unlink(outputPathA, () => {})
+                            fs.unlink(outputPathV, () => {})
+
                             resolve(output)
                         })
                     })
@@ -204,14 +215,10 @@ class Transcoder {
 
             for (let trackIndex = descriptor.tracks.length - 1; trackIndex >= 0; trackIndex--) {
                 composedPath = `${appData.CACHE_DIR}/track_${descriptor.tracks[trackIndex].id}_composed.mp4`
-
-                let overlayedPath = `${appData.CACHE_DIR}/track_${descriptor.tracks[trackIndex].id}_overlayed.mp4`
-
+                
                 await transcoder.composeVideoTrack(descriptor.tracks[trackIndex], lastPath, composedPath)
 
-                await transcoder.overlayBackground(lastPath, composedPath, 0, overlayedPath)
-
-                lastPath = overlayedPath
+                lastPath = composedPath
             }
 
             console.log('final path:', lastPath)
