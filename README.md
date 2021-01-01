@@ -36,7 +36,7 @@ npm run start-electron
 - [ ] Transcode backend
   - [x] Generate cover image
   - [x] Get duration
-  - [ ] Clip & joint video
+  - [x] Clip & joint video
   - [ ] Separate video/audio
 - [ ] ...
   - [ ] Filters
