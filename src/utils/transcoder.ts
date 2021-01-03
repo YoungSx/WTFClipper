@@ -22,6 +22,23 @@ class Transcoder {
         })
     }
 
+    generatePreviewVideo (input: string) {
+        let { nameWithoutExt } = parseFileNameFromPath(input)
+        let outputPath = `${appData.CACHE_DIR}/${nameWithoutExt}_preview.mp4`
+        let cmd = `ffmpeg -i ${input} -vf scale=720:360 ${outputPath} -y`
+        return new Promise((resolve, reject) => {
+            child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
+                if (err) {
+                    resolve(err)
+                } else if (stdout) {
+                    resolve(outputPath)
+                } else {
+                    resolve(stderr)
+                }
+            })
+        })
+    }
+
     generateBlackVideo (duration: number, frameRate: number, color: string, width: number, height: number, output: string, callback?: any) {
         let resolution = <string><any>width + 'x' + <string><any>height
         let cmd = `ffmpeg -f lavfi -i color=size=${resolution}:rate=${frameRate}:color=${color} -t ${duration / 1000} ${output}`
