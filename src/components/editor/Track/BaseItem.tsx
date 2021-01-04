@@ -5,7 +5,7 @@ import style from './style/track.module.css'
 import { baseItem as baseItemConfig } from './config'
 
 import { TrackItemModel, TrackModel } from '../../../model/type'
-import { UPDATE_ITEM_TIME } from '../../../redux/constants/makers'
+import { UPDATE_ITEM_TIME, SET_ITEM_SELECTIONS } from '../../../redux/constants/makers'
 
 import store from '../../../redux'
 
@@ -122,7 +122,7 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         store.dispatch({
             type: UPDATE_ITEM_TIME,
             itemInfoList: itemList
-        })    
+        })
     }
 
     computeTimeInfo () {
@@ -153,6 +153,7 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
             this.itemMove(e)
         }
         const itemMouseUp = (e: any) => {
+            e.stopPropagation()
             itemEle?.removeEventListener('mousemove', itemMouseMove)
             makersEle?.removeEventListener('mousemove', itemMouseMove)
             if (e.clientX === this.state.itemMoveStartStatus.x
@@ -164,6 +165,9 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         }
         itemEle?.addEventListener('mousedown', itemMouseDown)
         itemEle?.addEventListener('mouseup', itemMouseUp)
+        itemEle?.addEventListener('click', (e: any) => {
+            e.stopPropagation()
+        })
         makersEle?.addEventListener('mouseup', itemMouseUp)
     }
 
@@ -401,11 +405,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
     }
 
     itemOnlyClick () {
-        /**
-         * TODO:
-         *  set selected item
-         *  ...
-         */
+        store.dispatch({
+            type: SET_ITEM_SELECTIONS,
+            ids: [
+                this.props.item.id
+            ]
+        })
     }
 
     render () {

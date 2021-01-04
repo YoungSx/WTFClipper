@@ -8,7 +8,7 @@ import style from './Track/style/track.module.css'
 import { pixelToTime } from '../../utils/time'
 
 import { MakersStoreModel, FILETYPE } from '../../model/type'
-import { ADD_RESOURCE_TO_NEW_TRACK } from '../../redux/constants/makers'
+import { ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS } from '../../redux/constants/makers'
 
 import store from '../../redux'
 
@@ -52,11 +52,18 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
         const tracksAreaScroll = (e: any) => {
             this.tracksAreaScroll()
         }
+        const tracksAreaClick = (e: any) => {
+            store.dispatch({
+                type: SET_ITEM_SELECTIONS,
+                ids: []
+            })
+        }
         this.state.tracksAreaEle.addEventListener('dragover', (e: any) => {
             e.preventDefault()
         })
         this.state.tracksAreaEle.addEventListener('drop', tracksAreaOnDrop)
         this.state.tracksAreaEle.addEventListener('scroll', tracksAreaScroll)
+        this.state.tracksAreaEle.addEventListener('click', tracksAreaClick)
     }
 
     tracksAreaOnDrop (e: any, rid: string) {

@@ -1,12 +1,12 @@
 import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE, MakersStoreModel } from '../model/type'
-import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK } from './constants/makers'
+import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS } from './constants/makers'
 
 import { deepCopy } from '../utils/tool'
 import { UUID } from '../utils/file'
 
 const initialState: MakersStoreModel = {
     tracks: [],
-    selectedTrackItemsId: [],
+    itemSelections: [],
     duration: 0
 }
 
@@ -172,6 +172,13 @@ const addResourceToTrack = (state = initialState, file: BaseFileType, timeFrom: 
     return addItemToTrack(state, item, trackId, itemIndex)
 }
 
+const setItemSelections = (state = initialState, ids: Array<string>) => {
+    console.log(ids)
+    return Object.assign(state, {
+        itemSelections: ids
+    })
+}
+
 const makers = (state = initialState, action: any) => {
     switch (action.type) {
         case UPDATE_ITEM:
@@ -182,6 +189,8 @@ const makers = (state = initialState, action: any) => {
             return addResourceToTrack(state, action.file, action.timeFrom, action.clip_duration, action.trackId, action.itemIndex)
         case ADD_RESOURCE_TO_NEW_TRACK:
             return addResourceToNewTrack(state, action.file, action.timeFrom, action.clip_duration, action.itemIndex, action.trackIndex)
+        case SET_ITEM_SELECTIONS:
+            return setItemSelections(state, action.ids)
         default:
             return state
     }
