@@ -6,10 +6,20 @@ import { UUID } from '../utils/file'
 
 const initialState: MakersStoreModel = {
     tracks: [],
-    selectedTrackItemsId: [] 
+    selectedTrackItemsId: [],
+    duration: 0
 }
 
 export const getTracks = (state = initialState) => state.tracks
+
+const getGlobalDuration = (state = initialState) => {
+    let maxDuration = 0
+    state.tracks.forEach(track => {
+        let lastItem = track.items[track.items.length - 1]
+        if (lastItem.type === TRACKITEMTYPE.VIDEO && lastItem.from + lastItem.clip_duration > maxDuration) maxDuration = lastItem.from + lastItem.clip_duration
+    })
+    return maxDuration
+}
 
 const updateItemTime = (state = initialState, itemInfoList: [any]) => {
     let newState = deepCopy(state)
@@ -28,7 +38,9 @@ const updateItemTime = (state = initialState, itemInfoList: [any]) => {
             }
         }
     })
-    return newState
+    return Object.assign(newState, {
+        duration: getGlobalDuration(newState)
+    })
 }
 
 const fileToItem = (file: BaseFileType | MediaFileType) => {
@@ -147,7 +159,9 @@ const addItemToTrack = (state = initialState, item: TrackItemModel, trackId: str
             newState.tracks[trackIndex].items.splice(itemIndex, 0, item)
         }
     }
-    return newState
+    return Object.assign(newState, {
+        duration: getGlobalDuration(newState)
+    })
 }
 
 const addResourceToTrack = (state = initialState, file: BaseFileType, timeFrom: number, clip_duration: number, trackId: string, itemIndex: number) => {

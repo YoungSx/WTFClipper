@@ -63,7 +63,8 @@ export interface TrackModel {
 
 export interface MakersStoreModel {
     tracks: Array<TrackModel>,
-    selectedTrackItemsId: Array<any>
+    selectedTrackItemsId: Array<any>,
+    duration: number
 }
 
 export interface DescriptorModel {

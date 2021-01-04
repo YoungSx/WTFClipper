@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import BaseItem from './BaseItem'
 
-import { pixelToTime } from '../../../utils/time'
+import { pixelToTime, timeToPixel } from '../../../utils/time'
 
 import { TrackModel, BaseFileType, MediaFileType, FILETYPE } from '../../../model/type'
 import { ADD_RESOURCE_TO_TRACK } from '../../../redux/constants/makers'
@@ -14,7 +14,8 @@ import { getResourceFile } from '../../../redux/resource'
 
 interface TrackProps {
     track: TrackModel
-    className: string
+    className: string,
+    globalDuration: number
 }
 
 interface TrackState {
@@ -73,10 +74,14 @@ class Track extends React.Component<TrackProps, TrackState> {
         let trackItems = this.props.track.items.map((item, index) => {
             return <BaseItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></BaseItem>
         })
+        let inlineStyle = {
+            width: `${timeToPixel(this.props.globalDuration)+60}px`
+        }
         return (
             <>
                 <div id={ this.state.eleId }
                     className={ this.props.className }
+                    style={inlineStyle}
                     onDragOver={ e => e.preventDefault() }>
                     { trackItems }
                 </div>
@@ -89,7 +94,8 @@ const mapStateToProps = (state: any, ownProps: any) => {
     return {
         tracks: state['makers']['tracks'],
         track: ownProps.track,
-        className: ownProps.className
+        className: ownProps.className,
+        globalDuration: state['makers']['duration']
     }
 }
 
