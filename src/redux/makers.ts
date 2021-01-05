@@ -1,5 +1,5 @@
 import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE, MakersStoreModel } from '../model/type'
-import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS } from './constants/makers'
+import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, DELETE_ITEMS } from './constants/makers'
 
 import { deepCopy } from '../utils/tool'
 import { UUID } from '../utils/file'
@@ -173,10 +173,38 @@ const addResourceToTrack = (state = initialState, file: BaseFileType, timeFrom: 
 }
 
 const setItemSelections = (state = initialState, ids: Array<string>) => {
-    console.log(ids)
     return Object.assign(state, {
         itemSelections: ids
     })
+}
+
+const deleteItems = (state = initialState, ids: Array<string>) => {
+    let newState = deepCopy(state)
+    if (ids.length === 0) return state
+    for (let trackIndex = 0; trackIndex < newState.tracks.length; trackIndex++) {
+        let track = newState.tracks[trackIndex]
+        for (let itemIndex = 0; itemIndex < track.items.length; itemIndex++) {
+            for (let i = 0; i < ids.length; i++) {
+                if (track.items[itemIndex].id === ids[i]) {
+                    // remove in ids
+                    ids.splice(i, 1)
+                    // remove in track
+                    track.items.splice(itemIndex, 1)
+                    itemIndex--
+                    break
+                }
+            }
+            // when this track is empty, remove it
+            if (track.items.length === 0) {
+                newState.tracks.splice(trackIndex, 1)
+                trackIndex--
+            }
+            // when ids is empty, exit
+            if (ids.length === 0) return newState
+        }
+    }
+    // 正常不会走到这里，走到这里说明 ids 里面有剩余没在轨道中找到
+    return newState
 }
 
 const makers = (state = initialState, action: any) => {
@@ -191,6 +219,8 @@ const makers = (state = initialState, action: any) => {
             return addResourceToNewTrack(state, action.file, action.timeFrom, action.clip_duration, action.itemIndex, action.trackIndex)
         case SET_ITEM_SELECTIONS:
             return setItemSelections(state, action.ids)
+        case DELETE_ITEMS:
+            return deleteItems(state, action.ids)
         default:
             return state
     }

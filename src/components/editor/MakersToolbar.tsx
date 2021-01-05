@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, Divider } from 'antd'
 
+import { DELETE_ITEMS } from '../../redux/constants/makers'
+
 import Transcoder from '../../utils/transcoder'
 
 import store from '../../redux'
@@ -23,10 +25,22 @@ export default class MakersToolbar extends React.Component<MakersToolbarProps> {
         }
     }
 
+    deleteItem () {
+        store.dispatch({
+            type: DELETE_ITEMS,
+            ids: store.getState().makers.itemSelections
+        })
+    }
+
     render () {
         return (
             <>
                 <div className={this.props.className}>
+                    <Button
+                        style={{ height: '32px', margin: '4px', float: 'left' }}
+                        onClick={() => { this.deleteItem() }}>
+                        Delete
+                    </Button>
                     <Button type="primary"
                         style={{ height: '32px', margin: '4px', float: 'right' }}
                         onClick={() => { this.output() }}>
