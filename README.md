@@ -21,6 +21,7 @@ npm run start-electron
   - [x] Drag to change time
   - [x] Sync time to store
   - [x] Trim
+  - [x] Delete
   - [ ] Change order
   - [ ] Derail
   - [ ] Separate video/audio
