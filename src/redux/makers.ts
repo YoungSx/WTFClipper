@@ -1,7 +1,7 @@
 import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE, MakersStoreModel } from '../model/type'
-import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, DELETE_ITEMS } from './constants/makers'
+import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, DELETE_ITEMS, CLIP_ITEMS } from './constants/makers'
 
-import { deepCopy } from '../utils/tool'
+import { deepCopy, inArray } from '../utils/tool'
 import { UUID } from '../utils/file'
 
 const initialState: MakersStoreModel = {
@@ -207,6 +207,44 @@ const deleteItems = (state = initialState, ids: Array<string>) => {
     return newState
 }
 
+export const clipItems = (state = initialState, time: number, ids: Array<string>) => {
+    let newState = deepCopy(state)
+    let clipAll = ids.length > 0 ? false : true
+    let count = 0
+
+    if (time < 0) return state
+    for (let trackIndex = 0; trackIndex < newState.tracks.length; trackIndex++) {
+        let track = newState.tracks[trackIndex]
+        for (let itemIndex = 0; itemIndex < track.items.length; itemIndex++) {
+            let item = track.items[itemIndex]
+            if (item.from + item.clip_duration < time) break
+            if (item.from > time) continue
+
+            if (item.from < time && item.from + item.clip_duration > time
+                && (clipAll || (inArray(item.id, ids)))) {
+                let halfItemRight = Object.assign(deepCopy(item), {
+                    id: UUID(),
+                    from: time,
+                    clip_duration: item.clip_duration - (time - item.from)
+                })
+                let halfItemLeft = Object.assign(item, {
+                    clip_duration: time - item.from
+                })
+                track.items[itemIndex] = halfItemLeft
+                track.items.splice(itemIndex + 1, 0, halfItemRight)
+
+                if (!clipAll) {
+                    count++
+                    if (count === ids.length) return newState
+                }
+                // next track
+                break
+            } else continue
+        }
+    }
+    return newState
+}
+
 const makers = (state = initialState, action: any) => {
     switch (action.type) {
         case UPDATE_ITEM:
@@ -221,6 +259,8 @@ const makers = (state = initialState, action: any) => {
             return setItemSelections(state, action.ids)
         case DELETE_ITEMS:
             return deleteItems(state, action.ids)
+        case CLIP_ITEMS:
+            return clipItems(state, action.time, action.ids)
         default:
             return state
     }
