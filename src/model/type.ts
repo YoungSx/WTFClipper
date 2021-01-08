@@ -64,7 +64,8 @@ export interface TrackModel {
 export interface MakersStoreModel {
     tracks: Array<TrackModel>,
     itemSelections: Array<any>,
-    duration: number
+    duration: number,
+    zoomLevel: number
 }
 
 export interface DescriptorModel {

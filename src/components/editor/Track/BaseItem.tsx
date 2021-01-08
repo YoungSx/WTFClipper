@@ -440,7 +440,8 @@ const mapStateToProps = (state: any, ownProps: any) => {
     return {
         item: ownProps.item,
         index: ownProps.index,
-        track: ownProps.track
+        track: ownProps.track,
+        zoomLevel: state.makers.zoomLevel
     }
 }
 

@@ -1,5 +1,5 @@
 import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE, MakersStoreModel } from '../model/type'
-import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, DELETE_ITEMS, CLIP_ITEMS } from './constants/makers'
+import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, DELETE_ITEMS, CLIP_ITEMS, ZOOM_LEVEL_CHANGE } from './constants/makers'
 
 import { deepCopy, inArray } from '../utils/tool'
 import { UUID } from '../utils/file'
@@ -7,7 +7,8 @@ import { UUID } from '../utils/file'
 const initialState: MakersStoreModel = {
     tracks: [],
     itemSelections: [],
-    duration: 0
+    duration: 0,
+    zoomLevel: 2
 }
 
 export const getTracks = (state = initialState) => state.tracks
@@ -245,6 +246,12 @@ export const clipItems = (state = initialState, time: number, ids: Array<string>
     return newState
 }
 
+const zoomLevelChange = (state = initialState, level: number) => {
+    return Object.assign(deepCopy(state), {
+        zoomLevel: level
+    })
+}
+
 const makers = (state = initialState, action: any) => {
     switch (action.type) {
         case UPDATE_ITEM:
@@ -261,6 +268,8 @@ const makers = (state = initialState, action: any) => {
             return deleteItems(state, action.ids)
         case CLIP_ITEMS:
             return clipItems(state, action.time, action.ids)
+        case ZOOM_LEVEL_CHANGE:
+            return zoomLevelChange(state, action.level)
         default:
             return state
     }

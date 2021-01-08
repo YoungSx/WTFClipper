@@ -30,3 +30,15 @@ export function deepCopy(source: any): any {
     }
     return newObject
 }
+
+export function cellPixels (level: number, min: number = 1, max: number = 3) {
+    const middle = 50
+    switch (level) {
+        case 1:
+            return 60 * 60 * 1000
+        case 3:
+            return 1000 / 30
+        default:
+            return 1000
+    }
+}

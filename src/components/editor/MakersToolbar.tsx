@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Divider } from 'antd'
+import { Button, Slider } from 'antd'
 
-import { DELETE_ITEMS } from '../../redux/constants/makers'
+import { DELETE_ITEMS, ZOOM_LEVEL_CHANGE } from '../../redux/constants/makers'
 
 import Transcoder from '../../utils/transcoder'
 
@@ -32,20 +32,33 @@ export default class MakersToolbar extends React.Component<MakersToolbarProps> {
         })
     }
 
+    zoomSliderChange (velue: number) {
+        store.dispatch({
+            type: ZOOM_LEVEL_CHANGE,
+            level: velue
+        })
+    }
+
     render () {
         return (
             <>
                 <div className={this.props.className}>
                     <Button
-                        style={{ height: '32px', margin: '4px', float: 'left' }}
+                        style={{ height: '32px', margin: '4px' }}
                         onClick={() => { this.deleteItem() }}>
                         Delete
                     </Button>
                     <Button type="primary"
-                        style={{ height: '32px', margin: '4px', float: 'right' }}
+                        style={{ height: '32px', margin: '4px' }}
                         onClick={() => { this.output() }}>
                         Output
                     </Button>
+                    <Slider
+                        min={1}
+                        max={3}
+                        defaultValue={2}
+                        style={{ width: '100px', float: 'right', marginRight: '15px' }}
+                        onAfterChange={this.zoomSliderChange} />
                 </div>
             </>
         )
