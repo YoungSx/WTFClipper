@@ -8,7 +8,8 @@ const initialState: MakersStoreModel = {
     tracks: [],
     itemSelections: [],
     duration: 0,
-    zoomLevel: 2
+    zoomLevel: 2,
+    currentTime: 0
 }
 
 export const getTracks = (state = initialState) => state.tracks

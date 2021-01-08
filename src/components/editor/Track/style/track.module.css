@@ -58,3 +58,10 @@
     height: 40px;
     background-color: #2f54eb;
 }
+.playhead {
+    height: calc(50vh - 30px - 30px);
+    width: 1px;
+    background-color: #000000;
+    position: absolute;
+    z-index: 300;
+}

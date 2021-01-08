@@ -65,7 +65,8 @@ export interface MakersStoreModel {
     tracks: Array<TrackModel>,
     itemSelections: Array<any>,
     duration: number,
-    zoomLevel: number
+    zoomLevel: number,
+    currentTime: number
 }
 
 export interface DescriptorModel {
