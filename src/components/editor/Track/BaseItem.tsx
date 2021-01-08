@@ -95,6 +95,12 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         })
     }
 
+    componentWillReceiveProps(nextProps: BaseItemProps) {
+        this.setItemLeft(timeToPixel(nextProps.item.from), () => {
+            this.setItemWidth(timeToPixel(nextProps.item.clip_duration))
+        })
+    }
+
     setItemLeft (left: number, callback?: () => void) {
         this.setState({
             itemStyle: Object.assign({}, this.state.itemStyle, {
