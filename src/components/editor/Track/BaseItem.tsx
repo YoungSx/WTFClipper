@@ -45,7 +45,7 @@ interface BaseItemState {
     }
 }
 
-export default class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
+class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
     constructor (props:BaseItemProps) {
         super(props)
         this.state = {
@@ -435,3 +435,18 @@ export default class BaseItem extends React.Component<BaseItemProps, BaseItemSta
         )
     }
 }
+
+const mapStateToProps = (state: any, ownProps: any) => {
+    return {
+        item: ownProps.item,
+        index: ownProps.index,
+        track: ownProps.track
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    {
+        store
+    }
+)(BaseItem as any)
