@@ -1,5 +1,6 @@
 import { BaseFileType, MediaFileType, TrackItemModel, TrackModel, FILETYPE, TRACKITEMTYPE, MakersStoreModel } from '../model/type'
-import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK, ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, DELETE_ITEMS, CLIP_ITEMS, ZOOM_LEVEL_CHANGE } from './constants/makers'
+import { UPDATE_ITEM, UPDATE_ITEM_TIME, ADD_RESOURCE_TO_TRACK, ADD_TRACK,ADD_RESOURCE_TO_NEW_TRACK,
+        SET_ITEM_SELECTIONS, DELETE_ITEMS, CLIP_ITEMS, ZOOM_LEVEL_CHANGE, SET_MAKERS_CURRENTTIME } from './constants/makers'
 
 import { deepCopy, inArray } from '../utils/tool'
 import { UUID } from '../utils/file'
@@ -253,6 +254,12 @@ const zoomLevelChange = (state = initialState, level: number) => {
     })
 }
 
+const setCurrentTime = (state = initialState, time: number) => {
+    return Object.assign(deepCopy(state), {
+        currentTime: time
+    })
+}
+
 const makers = (state = initialState, action: any) => {
     switch (action.type) {
         case UPDATE_ITEM:
@@ -271,6 +278,8 @@ const makers = (state = initialState, action: any) => {
             return clipItems(state, action.time, action.ids)
         case ZOOM_LEVEL_CHANGE:
             return zoomLevelChange(state, action.level)
+        case SET_MAKERS_CURRENTTIME:
+            return setCurrentTime(state, action.time)
         default:
             return state
     }

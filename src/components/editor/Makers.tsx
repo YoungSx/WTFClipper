@@ -8,7 +8,7 @@ import style from './Track/style/track.module.css'
 import { pixelToTime, timeToPixel } from '../../utils/time'
 
 import { MakersStoreModel, FILETYPE } from '../../model/type'
-import { ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS } from '../../redux/constants/makers'
+import { ADD_RESOURCE_TO_NEW_TRACK, SET_ITEM_SELECTIONS, SET_MAKERS_CURRENTTIME } from '../../redux/constants/makers'
 
 import store from '../../redux'
 
@@ -21,7 +21,8 @@ interface MakersState {
         offset: number,
         width: number
     },
-    playheadEle: any
+    playheadEle: any,
+    playheadStyle: any
 }
 
 class Makers extends React.Component<MakersStoreModel, MakersState> {
@@ -33,7 +34,11 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
                 offset: 0, // positive
                 width: 0
             },
-            playheadEle: null
+            playheadEle: null,
+            playheadStyle: {
+                display: 'none',
+                left: '0px'
+            }
         }
     }
 
@@ -49,7 +54,7 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
     }
 
     componentWillReceiveProps(nextProps: MakersStoreModel) {
-        this.setPlayheadLeft(this.props.currentTime)
+        this.setPlayheadLeft(nextProps.currentTime)
     }
 
     bindMakersEvent () {
@@ -115,10 +120,27 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
         let currentTimeRealPixel = timeToPixel(this.props.currentTime) - this.state.header.offset
         if (currentTimeRealPixel < 0 || currentTimeRealPixel > this.state.header.width) {
             this.state.playheadEle.style.display = 'none'
+            this.setState({
+                playheadStyle: {
+                    display: 'none',
+                    left: '0px'
+                }
+            })
         } else {
-            this.state.playheadEle.style.display = 'block'
-            this.state.playheadEle.style.left = String(currentTimeRealPixel) + 'px'
+            this.setState({
+                playheadStyle: {
+                    display: 'block',
+                    left: String(currentTimeRealPixel) + 'px'
+                }
+            })
         }
+    }
+
+    timelineClick (time: number) {
+        store.dispatch({
+            type: SET_MAKERS_CURRENTTIME,
+            time
+        })
     }
 
     render () {
@@ -128,8 +150,13 @@ class Makers extends React.Component<MakersStoreModel, MakersState> {
         return (
             <>
                 <MakersToolbar className={style.makers_toolbar}></MakersToolbar>
-                <div id="playhead" className={style.playhead}></div>
-                <Timeline className={style.timeline}></Timeline>
+                <div id="playhead"
+                    className={style.playhead} 
+                    style={this.state.playheadStyle}></div>
+                <Timeline
+                    className={style.timeline}
+                    header={this.state.header}
+                    onTimelineClick={(time: number) => this.timelineClick(time)}></Timeline>
                 <div id="tracks_area" className={style.tracks_area}>
                     { trackItems }
                 </div>
