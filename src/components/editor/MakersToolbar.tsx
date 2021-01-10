@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Slider } from 'antd'
 
-import { DELETE_ITEMS, ZOOM_LEVEL_CHANGE } from '../../redux/constants/makers'
+import { DELETE_ITEMS, ZOOM_LEVEL_CHANGE, CLIP_ITEMS } from '../../redux/constants/makers'
 
 import Transcoder from '../../utils/transcoder'
 
@@ -39,6 +39,14 @@ export default class MakersToolbar extends React.Component<MakersToolbarProps> {
         })
     }
 
+    clipItems () {
+        store.dispatch({
+            type: CLIP_ITEMS,
+            time: store.getState().makers.currentTime,
+            ids: store.getState().makers.itemSelections
+        })
+    }
+
     render () {
         return (
             <>
@@ -47,6 +55,11 @@ export default class MakersToolbar extends React.Component<MakersToolbarProps> {
                         style={{ height: '32px', margin: '4px' }}
                         onClick={() => { this.deleteItem() }}>
                         Delete
+                    </Button>
+                    <Button
+                        style={{ height: '32px', margin: '4px', float: 'left' }}
+                        onClick={() => { this.clipItems() }}>
+                        Clip
                     </Button>
                     <Button type="primary"
                         style={{ height: '32px', margin: '4px' }}
