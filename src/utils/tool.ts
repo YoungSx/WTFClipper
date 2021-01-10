@@ -31,7 +31,7 @@ export function deepCopy(source: any): any {
     return newObject
 }
 
-export function cellPixels (level: number, min: number = 1, max: number = 3) {
+export function cellTime (level: number, min: number = 1, max: number = 3) {
     const middle = 50
     switch (level) {
         case 1:

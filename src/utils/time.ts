@@ -1,4 +1,4 @@
-import { cellPixels } from './tool'
+import { cellTime } from './tool'
 import store from '../redux'
 
 /**
@@ -7,7 +7,7 @@ import store from '../redux'
  * 
  */
 export function timeToPixel (time: number) {
-    return (time / cellPixels(store.getState()['makers']['zoomLevel'])) * 60
+    return (time / cellTime(store.getState()['makers']['zoomLevel'])) * 60
 }
 
 /**
@@ -16,5 +16,5 @@ export function timeToPixel (time: number) {
  * 
  */
 export function pixelToTime (pixel: number) {
-    return (pixel / 60) * cellPixels(store.getState()['makers']['zoomLevel'])
+    return (pixel / 60) * cellTime(store.getState()['makers']['zoomLevel'])
 }
