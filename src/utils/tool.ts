@@ -42,3 +42,7 @@ export function cellTime (level: number, min: number = 1, max: number = 3) {
             return 1000
     }
 }
+
+export function addZero (num: number, len: number = 2) {
+    return (`0${num}`).slice(-len)
+}
