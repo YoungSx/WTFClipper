@@ -22,9 +22,11 @@ npm run start-electron
   - [x] Sync time to store
   - [x] Trim
   - [x] Delete
+  - [x] Clip
   - [ ] Change order
   - [ ] Derail
   - [ ] Separate video/audio
+  - [x] zoom
 - [ ] Preview module
   - [ ] Basic video joint preview
 - [ ] Resource library
