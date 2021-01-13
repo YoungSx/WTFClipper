@@ -14,10 +14,10 @@ class Transcoder {
         let result = child_process.exec(cmd, function(err: string, stdout: string, stderr: string){
             if (err) {
                 callback(err)
-            } else if (stdout) {
-                callback(stdout)
+            } else if (stderr) {
+                callback(outputPath)
             } else {
-                callback(stderr)
+                callback(outputPath)
             }
         })
     }
