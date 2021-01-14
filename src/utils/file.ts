@@ -4,6 +4,10 @@ import { file as fileConfig } from '../components/editor/Resource/config'
 import { inArray } from './tool'
 import Transcoder from './transcoder'
 
+const fs = require('fs')
+const path = require('path')
+const mineType = require('mime-types')
+
 export function parseFileNameFromPath (path:string) {
     let tempIndex1 = path.lastIndexOf('/')
     let tempIndex2 = path.lastIndexOf('\\')
@@ -57,4 +61,11 @@ export function extType (ext: string) {
 export function fileType (path: string) {
     let { ext } = parseFileNameFromPath(path)
     return extType(ext)
+}
+
+export function fileToBase64 (file: string) {
+    let filePath = path.resolve(file)
+    let data = fs.readFileSync( path.resolve(filePath))
+    data = new Buffer(data).toString('base64')
+    return 'data:' + mineType.lookup(filePath) + ';base64,' + data
 }
