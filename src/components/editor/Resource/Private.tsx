@@ -12,6 +12,7 @@ import style from './style/resource.module.css'
 import store from '../../../redux'
 
 import BaseFile from './BaseFile'
+import VideoFile from './VideoFile'
 
 class Private extends React.Component<PrivateStoreModel> {
     myMediasOnDrop = (e: any) => {
@@ -35,7 +36,7 @@ class Private extends React.Component<PrivateStoreModel> {
         let { name, nameWithoutExt } = parseFileNameFromPath(src)
         getDuration(src, (duration_result: number | string) => {
             if (typeof duration_result === "number")
-                getCoverImage(src, id, (r: string) => {
+                getCoverImage(src, id, (outPath: string) => {
                     /**
                      * TODO:
                      * check if sucess
@@ -48,7 +49,8 @@ class Private extends React.Component<PrivateStoreModel> {
                         type: FILETYPE.VIDEO,
                         duration: duration_result,
                         name: name,
-                        displayName: nameWithoutExt
+                        displayName: nameWithoutExt,
+                        cover: outPath
                     }
                     let db = new dataBase('private_files')
                     db.push(file_item)
@@ -66,8 +68,9 @@ class Private extends React.Component<PrivateStoreModel> {
     }
 
     render () {
-        let files = this.props['private']['media'].map((file) =>
-            <BaseFile key={`file_${file.id}`} file={file}></BaseFile>
+        let files = this.props['private']['media'].map((file) => {
+            if (file.type === FILETYPE.VIDEO) return <VideoFile key={`file_${file.id}`} file={file}></VideoFile>
+            else return <BaseFile key={`file_${file.id}`} file={file}></BaseFile>}
         )
 
         return (

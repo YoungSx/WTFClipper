@@ -15,7 +15,10 @@ export interface BaseFileType {
     id: string,
     name: string,
     displayName: string,
-    type: FILETYPE
+    type: FILETYPE,
+    path?: string,
+    duration?: number,
+    cover?: string
 }
 
 export interface MediaFileType extends BaseFileType {
@@ -24,15 +27,18 @@ export interface MediaFileType extends BaseFileType {
 }
 
 export interface VideoFileType extends MediaFileType {
-    type: FILETYPE.VIDEO
+    type: FILETYPE.VIDEO,
+    cover: string
 }
 
 export interface AudioFileType extends MediaFileType {
-    type: FILETYPE.AUDIO
+    type: FILETYPE.AUDIO,
+    cover: ''
 }
 
 export interface PictureFileType extends MediaFileType {
-    type: FILETYPE.PICTURE
+    type: FILETYPE.PICTURE,
+    cover: string
 }
 
 export interface TrackItemModel {
