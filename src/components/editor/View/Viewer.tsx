@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Tabs } from 'antd'
 import style from './style/view.module.css'
 
@@ -12,7 +13,7 @@ interface ViewerState {
     canvasEle: any
 }
 
-export default class Viewer extends React.Component<ViewerProps, ViewerState> {
+class Viewer extends React.Component<ViewerProps, ViewerState> {
     constructor (props: ViewerProps) {
         super(props)
         this.state = {
@@ -44,3 +45,17 @@ export default class Viewer extends React.Component<ViewerProps, ViewerState> {
         )
     }
 }
+
+const mapStateToProps = (state: any, ownProps: any) => {
+    return {
+        tracks: state['makers']['tracks'],
+        currentTime: state['makers']['currentTime']
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    {
+        store
+    }
+)(Viewer as any)
