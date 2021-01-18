@@ -1,0 +1,1 @@
+export const SET_PLAY_STATUS = 'SET_PLAY_STATUS'

@@ -49,7 +49,8 @@ class Viewer extends React.Component<ViewerProps, ViewerState> {
 const mapStateToProps = (state: any, ownProps: any) => {
     return {
         tracks: state['makers']['tracks'],
-        currentTime: state['makers']['currentTime']
+        currentTime: state['makers']['currentTime'],
+        isPlaying: state['view']['isPlaying']
     }
 }
 
