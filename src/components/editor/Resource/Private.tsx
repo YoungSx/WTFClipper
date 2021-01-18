@@ -13,6 +13,7 @@ import store from '../../../redux'
 
 import BaseFile from './BaseFile'
 import VideoFile from './VideoFile'
+import AudioFile from './AudioFile'
 
 class Private extends React.Component<PrivateStoreModel> {
     myMediasOnDrop = (e: any) => {
@@ -70,6 +71,7 @@ class Private extends React.Component<PrivateStoreModel> {
     render () {
         let files = this.props['private']['media'].map((file) => {
             if (file.type === FILETYPE.VIDEO) return <VideoFile key={`file_${file.id}`} file={file}></VideoFile>
+            else if (file.type === FILETYPE.AUDIO) return <AudioFile key={`file_${file.id}`} file={file}></AudioFile>
             else return <BaseFile key={`file_${file.id}`} file={file}></BaseFile>}
         )
 
