@@ -9,13 +9,13 @@ import { UPDATE_ITEM_TIME, SET_ITEM_SELECTIONS } from '../../../redux/constants/
 
 import store from '../../../redux'
 
-interface BaseItemProps {
+export interface BaseItemProps {
     item: TrackItemModel,
     index: number,
     track: TrackModel
 }
 
-interface BaseItemState {
+export interface BaseItemState {
     itemStyle: {},
     trackItemId: string,
     innerTrackItemId: string,
@@ -45,7 +45,7 @@ interface BaseItemState {
     }
 }
 
-class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
+export class BaseItem extends React.Component<BaseItemProps, BaseItemState> {
     constructor (props:BaseItemProps) {
         super(props)
         this.state = {
