@@ -33,7 +33,7 @@ npm run start-electron
   - [x] Add private file to database & pre-transcode
   - [ ] Display private file
     - [x] Display from database
-    - [ ] Display cover image
+    - [x] Display cover image
   - [x] Drag to tracks
   - [x] Insert new track
 - [ ] Transcode backend
