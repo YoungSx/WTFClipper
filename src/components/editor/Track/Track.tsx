@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import BaseItem from './BaseItem'
+import VideoItem from './VideoItem'
 
 import { pixelToTime, timeToPixel } from '../../../utils/time'
 
-import { TrackModel, BaseFileType, MediaFileType, FILETYPE } from '../../../model/type'
+import { TrackModel, BaseFileType, MediaFileType, FILETYPE, TRACKITEMTYPE } from '../../../model/type'
 import { ADD_RESOURCE_TO_TRACK } from '../../../redux/constants/makers'
 
 import store from '../../../redux'
@@ -72,7 +73,8 @@ class Track extends React.Component<TrackProps, TrackState> {
 
     render () {
         let trackItems = this.props.track.items.map((item, index) => {
-            return <BaseItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></BaseItem>
+            if (item.type === TRACKITEMTYPE.VIDEO) return <VideoItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></VideoItem>
+            else return <BaseItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></BaseItem>
         })
         let inlineStyle = {
             width: `${timeToPixel(this.props.globalDuration)+60}px`

@@ -17,6 +17,9 @@ interface VideoItemState extends BaseItemState {
 
 class VideoItem extends BaseItem {
     componentDidMount () {
+        this.setItemLeft(timeToPixel(this.props.item.from), () => {
+            this.setItemWidth(timeToPixel(this.props.item.clip_duration))
+        })
         this.setState({
             itemEle: document.getElementById(this.state.trackItemId),
             makersEle: document.getElementById('makers_area')
