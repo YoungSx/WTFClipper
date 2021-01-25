@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import BaseItem from './BaseItem'
 import VideoItem from './VideoItem'
+import AudioItem from './AudioItem'
 
 import { pixelToTime, timeToPixel } from '../../../utils/time'
 
@@ -74,6 +75,7 @@ class Track extends React.Component<TrackProps, TrackState> {
     render () {
         let trackItems = this.props.track.items.map((item, index) => {
             if (item.type === TRACKITEMTYPE.VIDEO) return <VideoItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></VideoItem>
+            else if (item.type === TRACKITEMTYPE.AUDIO) return <AudioItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></AudioItem>
             else return <BaseItem key={`track_${ item.id }`} item={ item } index={ index } track={ this.props.track }></BaseItem>
         })
         let inlineStyle = {
