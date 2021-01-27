@@ -8,6 +8,21 @@ const child_process = require('child_process')
 const fs = require('fs')
 
 class Transcoder {
+    extractVideo (input: string, output: string) {
+        let cmd = `ffmpeg -i ${input} -an -y -acodec copy ${output}`
+        return new Promise((resolve, reject) => {
+            child_process.exec(cmd, (err: string, stdout: string, stderr: string) => {
+                if (err) {
+                    resolve(err)
+                } else if (stdout) {
+                    resolve(stdout)
+                } else {
+                    resolve(stderr)
+                }
+            })
+        })
+    }
+
     generateCoverImage (input: string, dstName: string, callback?: any) {
         let outputPath = `${appData.COVER_DIR}/${dstName}.${appData.COVER_EXT}`
         let cmd = `ffmpeg -i ${input} -ss 1.0 -vframes 1 -vf scale=480:270 ${outputPath} -y`
