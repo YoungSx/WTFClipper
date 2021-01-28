@@ -8,6 +8,21 @@ const child_process = require('child_process')
 const fs = require('fs')
 
 class Transcoder {
+    async separateMedia (input: string) {
+        let transcoder = new Transcoder()
+        let { nameWithoutExt, ext } = parseFileNameFromPath(input)
+        let outA = `${appData.CACHE_DIR}/${nameWithoutExt}_v.${ext}`
+        let outV = `${appData.CACHE_DIR}/${nameWithoutExt}_a.aac`
+
+        await transcoder.extractVideo(input, outV)
+        await transcoder.extractVideo(input, outA)
+
+        return {
+            video: outV,
+            audio: outA
+        }
+    }
+
     extractVideo (input: string, output: string) {
         let cmd = `ffmpeg -i ${input} -an -y -acodec copy ${output}`
         return new Promise((resolve, reject) => {
