@@ -27,6 +27,8 @@ const createWindow = () => {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+
+  require('./src/utils/express.js');
 };
 
 app.on('ready', createWindow);
