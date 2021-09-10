@@ -24,7 +24,7 @@ const getGlobalDuration = (state = initialState) => {
     return maxDuration
 }
 
-const updateItemTime = (state = initialState, itemInfoList: [any]) => {
+const updateItemTime = (state = initialState, itemInfoList: any[]) => {
     let newState = deepCopy(state)
     itemInfoList.forEach(itemInfo => {
         let trackIndex = 0, itemIndex = 0, founded = false
