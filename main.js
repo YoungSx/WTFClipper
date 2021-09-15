@@ -23,6 +23,7 @@ const createWindow = () => {
       ? 'http://localhost:3000'
       :  path.join(__dirname, "/build/index.html");
   mainWindow.loadURL(startUrl);
+  // mainWindow.webContents.openDevTools({mode:'right'});
 
   mainWindow.on('closed', function () {
     mainWindow = null;
