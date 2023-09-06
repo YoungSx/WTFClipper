@@ -12,7 +12,7 @@
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "antd": "^4.5.2",
-    "electron": "^9.0.0",
+    "electron": "^22.3.21",
     "flv.js": "^1.5.0",
     "lowdb": "^1.0.0",
     "react": "^16.13.1",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@types/react-redux": "^7.1.11",
     "cross-env": "^7.0.2",
-    "electron": "^9.0.0",
+    "electron": "^22.3.21",
     "react-app-rewired": "^2.1.6",
     "redux-devtools": "^3.5.0"
   }
